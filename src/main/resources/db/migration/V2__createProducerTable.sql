@@ -1,0 +1,7 @@
+create table if not exists PRODUCER (
+    ID UUID NOT NULL DEFAULT uuid_generate_v4 (),
+    NAME VARCHAR NOT NULL,
+    EMAIL VARCHAR NOT NULL,
+    DOCUMENT VARCHAR NOT NULL,
+    PRIMARY KEY(ID)
+);
