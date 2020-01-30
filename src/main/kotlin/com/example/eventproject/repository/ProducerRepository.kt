@@ -5,13 +5,13 @@ import java.util.*
 
 interface ProducerRepository {
 
-    fun findProducer(id: UUID): Producer
+//    fun findProducer(id: UUID): Producer
 
     fun findAllProducers(): List<Producer>
-
-    fun saveProducer(producer: Producer): Producer
-
-    fun updateProducer(producer: Producer): Producer
-
-    fun destroyProducer(id: UUID): String
+//
+//    fun saveProducer(producer: Producer): Producer
+//
+//    fun updateProducer(producer: Producer): Producer
+//
+//    fun destroyProducer(id: UUID): String
 }
