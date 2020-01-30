@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/producer")
+@RequestMapping("/producers")
 class ProducerController(private val producerService: ProducerService) {
 
     @GetMapping
