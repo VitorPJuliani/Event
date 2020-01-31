@@ -1,6 +1,6 @@
 package com.example.eventproject.repository
 
-import com.example.eventproject.dto.ProducerDto
+import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -14,36 +14,35 @@ import java.util.*
 @Repository
 class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerRepository {
 
-    override fun findProducer(id: UUID): Producer? {
+    companion object {
+        const val selectProducerByIdQuery: String = "SELECT id, name, email, document FROM producer WHERE id = :id"
+        const val selectAllProducersQuery = "SELECT id, name, email, document FROM producer"
+        const val insertProducerQuery = "INSERT INTO producer(name, email, document) VALUES (?, ?, ?) RETURNING id, name, email, document"
+        const val updateProducerQuery = "UPDATE producer SET name = ?, email = ?, document = ? WHERE id = ? RETURNING id, name, email, document"
+        const val deleteProducerQuery = "DELETE FROM producer WHERE id = :id"
+    }
 
-        val selectOneQuery: String = "SELECT id, name, email, document FROM producer WHERE id = :id"
-
+    override fun findProducerById(id: UUID): Producer? {
         val parameter = MapSqlParameterSource()
                 .addValue("id", id)
 
         val namedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-        return namedParameterJdbcTemplate.queryForObject(selectOneQuery, parameter) { rs: ResultSet, _: Int ->
+        return namedParameterJdbcTemplate.queryForObject(selectProducerByIdQuery, parameter) { rs: ResultSet, _: Int ->
             Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
         }
     }
 
     override fun findAllProducers(): List<Producer> {
-
-        val selectAllQuery = "SELECT id, name, email, document FROM producer"
-
-        return jdbcTemplate.query(selectAllQuery) { rs: ResultSet, _: Int ->
+        return jdbcTemplate.query(selectAllProducersQuery) { rs: ResultSet, _: Int ->
             Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
         }
     }
 
-    override fun saveProducer(producer: ProducerDto): Producer? {
-
-        val insertQuery = "INSERT INTO producer(name, email, document) VALUES (?, ?, ?) RETURNING id, name, email, document"
-
+    override fun saveProducer(producer: ProducerForm): Producer? {
         return jdbcTemplate.execute { connection: Connection ->
 
-            val preparedStatement: PreparedStatement = connection.prepareStatement(insertQuery)
+            val preparedStatement: PreparedStatement = connection.prepareStatement(insertProducerQuery)
             preparedStatement.setString(1, producer.name)
             preparedStatement.setString(2, producer.email)
             preparedStatement.setString(3, producer.document)
@@ -53,17 +52,13 @@ class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerR
                 Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
             else
                 null
-
         }
     }
 
-    override fun updateProducer(producer: ProducerDto, id: UUID): Producer? {
-
-        val updateQuery = "UPDATE producer SET name = ?, email = ?, document = ? WHERE id = ? RETURNING id, name, email, document"
-
+    override fun updateProducer(producer: ProducerForm, id: UUID): Producer? {
         return jdbcTemplate.execute { connection: Connection ->
 
-            val preparedStatement: PreparedStatement = connection.prepareStatement(updateQuery)
+            val preparedStatement: PreparedStatement = connection.prepareStatement(updateProducerQuery)
             preparedStatement.setString(1, producer.name)
             preparedStatement.setString(2, producer.email)
             preparedStatement.setString(3, producer.document)
@@ -77,15 +72,12 @@ class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerR
         }
     }
 
-    override fun destroyProducer(id: UUID): Int {
-
-        val deleteQuery = "DELETE FROM producer WHERE id = :id"
-
+    override fun deleteProducer(id: UUID): Int {
         val parameter = MapSqlParameterSource()
                 .addValue("id", id)
 
         val namedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-        return namedParameterJdbcTemplate.update(deleteQuery, parameter)
+        return namedParameterJdbcTemplate.update(deleteProducerQuery, parameter)
     }
 }
