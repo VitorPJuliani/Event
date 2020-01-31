@@ -24,4 +24,8 @@ class ProducerService(private val producerRepository: ProducerRepository) {
         return producerRepository.updateProducer(producer, id)
     }
 
+    fun destroyProducer(id: UUID): Int {
+        return producerRepository.destroyProducer(id)
+    }
+
 }

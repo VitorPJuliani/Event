@@ -53,4 +53,14 @@ class ProducerController(private val producerService: ProducerService) {
 
         return ResponseEntity.ok(updatedProducer!!)
     }
+
+    @DeleteMapping("/{id}")
+    fun destroyProducer(@PathVariable("id") id: String): ResponseEntity<Any> {
+
+        val uuid = UUID.fromString(id)
+
+        producerService.destroyProducer(uuid)
+
+        return ResponseEntity.noContent().build()
+    }
 }

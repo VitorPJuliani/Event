@@ -14,5 +14,5 @@ interface ProducerRepository {
 
     fun updateProducer(producer: ProducerDto, id: UUID): Producer?
 
-//    fun destroyProducer(id: UUID): String
+    fun destroyProducer(id: UUID): Int
 }
