@@ -6,7 +6,7 @@ import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.repository.ProducerRepository
 import com.fasterxml.jackson.databind.JsonNode
-import java.util.*
+import java.util.UUID
 
 class ProducerService(private val producerRepository: ProducerRepository) {
 
@@ -22,16 +22,15 @@ class ProducerService(private val producerRepository: ProducerRepository) {
         }
     }
 
-    fun saveProducer(producer: JsonNode): Producer {
+    fun saveProducer(data: JsonNode): Producer {
+        val producer = ProducerForm(data)
 
-        validateProducerForm(producer)
-
-        val producerRequest = ProducerForm(producer["name"].textValue(), producer["email"].textValue(), producer["document"].textValue())
-
-        return producerRepository.saveProducer(producerRequest)!!
+        return producerRepository.saveProducer(producer)!!
     }
 
-    fun updateProducer(producer: ProducerForm, id: UUID): Producer? {
+    fun updateProducer(data: JsonNode, id: UUID): Producer? {
+        val producer = ProducerForm(data)
+
         return producerRepository.updateProducer(producer, id)
     }
 

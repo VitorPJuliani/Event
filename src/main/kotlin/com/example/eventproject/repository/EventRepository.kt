@@ -1,7 +1,7 @@
 package com.example.eventproject.repository
 
 import com.example.eventproject.model.Event
-import java.util.*
+import java.util.UUID
 
 interface EventRepository {
 

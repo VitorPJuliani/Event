@@ -2,7 +2,7 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
-import java.util.*
+import java.util.UUID
 
 interface ProducerRepository {
 
