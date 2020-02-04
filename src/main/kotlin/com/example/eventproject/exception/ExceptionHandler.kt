@@ -28,6 +28,13 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
     }
 
+    @ExceptionHandler(ResourceUpdateException::class)
+    fun resourceUpdateExceptionHandler(ex: ResourceUpdateException): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(HttpStatus.BAD_REQUEST, Instant.now(), ex.message!!)
+
+        return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
+    }
+
     override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         val exceptionResponse = ExceptionResponse(status, Instant.now(), (ex.cause as MissingKotlinParameterException).path[0].fieldName)
 

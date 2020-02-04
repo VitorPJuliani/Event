@@ -6,4 +6,4 @@ class ResourceNotFoundException(message: String): RuntimeException(message)
 
 class ResourceCreateException(message: String): RuntimeException(message)
 
-class ResourceDeleteException(message: String): RuntimeException()
+class ResourceUpdateException(message: String): RuntimeException(message)

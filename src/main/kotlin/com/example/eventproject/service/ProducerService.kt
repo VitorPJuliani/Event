@@ -1,7 +1,7 @@
 package com.example.eventproject.service
 
-import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
+import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.repository.ProducerRepository
@@ -23,24 +23,21 @@ class ProducerService(private val producerRepository: ProducerRepository) {
     }
 
     fun saveProducer(data: JsonNode): Producer {
-        val producer = ProducerForm(data)
-
-        return producerRepository.saveProducer(producer)!!
+        return producerRepository.saveProducer(ProducerForm(data))!!
     }
 
     fun updateProducer(data: JsonNode, id: UUID): Producer? {
         val producer = ProducerForm(data)
 
-        return producerRepository.updateProducer(producer, id)
+        return producerRepository.updateProducer(producer, id) ?: throw ResourceUpdateException("Invalid id: $id")
     }
 
     fun deleteProducer(id: UUID): Int {
-        return producerRepository.deleteProducer(id)
-    }
+        val statusDelete = producerRepository.deleteProducer(id)
 
-    private fun validateProducerForm(producer: JsonNode) {
-        if (!producer.has("name"))
-            throw ResourceCreateException("Field name is missing")
-    }
+        if (statusDelete == 0)
+            throw ResourceUpdateException("User not found to delete with id: $id")
 
+        return statusDelete
+    }
 }

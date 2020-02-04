@@ -1,6 +1,5 @@
 package com.example.eventproject.controller
 
-import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.service.ProducerService
 import com.fasterxml.jackson.databind.JsonNode
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.util.*
+import java.util.UUID
 
 
 @RestController
