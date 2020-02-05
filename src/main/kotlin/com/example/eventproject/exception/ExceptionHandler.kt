@@ -1,13 +1,9 @@
 package com.example.eventproject.exception
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.Instant
 
@@ -35,8 +31,9 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
     }
 
-    override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
-        val exceptionResponse = ExceptionResponse(status, Instant.now(), (ex.cause as MissingKotlinParameterException).path[0].fieldName)
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun illegalArgumentExceptionHandler(ex: IllegalArgumentException): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(HttpStatus.BAD_REQUEST, Instant.now(), ex.message!!)
 
         return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
     }

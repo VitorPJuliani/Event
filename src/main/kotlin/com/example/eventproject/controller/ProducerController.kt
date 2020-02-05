@@ -1,5 +1,6 @@
 package com.example.eventproject.controller
 
+import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.service.ProducerService
 import com.fasterxml.jackson.databind.JsonNode
@@ -35,7 +36,9 @@ class ProducerController(private val producerService: ProducerService) {
     }
 
     @PostMapping
-    fun saveProducer(@RequestBody producer: JsonNode): ResponseEntity<Producer> {
+    fun saveProducer(@RequestBody jsonProducer: JsonNode): ResponseEntity<Producer> {
+        val producer = ProducerForm(jsonProducer)
+
         val savedProducer = producerService.saveProducer(producer)
 
         val location = ServletUriComponentsBuilder
@@ -48,10 +51,12 @@ class ProducerController(private val producerService: ProducerService) {
     }
 
     @PutMapping("/{id}")
-    fun updateProducer(@RequestBody producer: JsonNode, @PathVariable("id") id: UUID): ResponseEntity<Producer> {
+    fun updateProducer(@RequestBody jsonProducer: JsonNode, @PathVariable("id") id: UUID): ResponseEntity<Producer> {
+        val producer = ProducerForm(jsonProducer)
+
         val updatedProducer = producerService.updateProducer(producer, id)
 
-        return ResponseEntity.ok(updatedProducer!!)
+        return ResponseEntity.ok(updatedProducer)
     }
 
     @DeleteMapping("/{id}")

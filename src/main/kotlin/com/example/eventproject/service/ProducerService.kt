@@ -1,11 +1,11 @@
 package com.example.eventproject.service
 
+import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.repository.ProducerRepository
-import com.fasterxml.jackson.databind.JsonNode
 import java.util.UUID
 
 class ProducerService(private val producerRepository: ProducerRepository) {
@@ -15,28 +15,24 @@ class ProducerService(private val producerRepository: ProducerRepository) {
     }
 
     fun findProducerById(id: UUID): Producer {
-        try {
-            return producerRepository.findProducerById(id)!!
-        } catch (e: Exception) {
-            throw ResourceNotFoundException("Not found producer with id: $id")
-        }
+        return producerRepository.findProducerById(id)
+                ?: throw ResourceNotFoundException("Not found producer with id: $id")
     }
 
-    fun saveProducer(data: JsonNode): Producer {
-        return producerRepository.saveProducer(ProducerForm(data))!!
+    fun saveProducer(producer: ProducerForm): Producer {
+        return producerRepository.saveProducer(producer) ?: throw ResourceCreateException("Creating error")
     }
 
-    fun updateProducer(data: JsonNode, id: UUID): Producer? {
-        val producer = ProducerForm(data)
-
-        return producerRepository.updateProducer(producer, id) ?: throw ResourceUpdateException("Invalid id: $id")
+    fun updateProducer(producer: ProducerForm, id: UUID): Producer {
+        return producerRepository.updateProducer(producer, id)
+                ?: throw ResourceUpdateException("Updating error: $id")
     }
 
     fun deleteProducer(id: UUID): Int {
         val statusDelete = producerRepository.deleteProducer(id)
 
         if (statusDelete == 0)
-            throw ResourceUpdateException("User not found to delete with id: $id")
+            throw ResourceNotFoundException("Not found producer with id: $id")
 
         return statusDelete
     }

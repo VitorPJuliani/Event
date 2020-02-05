@@ -15,7 +15,7 @@ import java.util.UUID
 class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerRepository {
 
     companion object {
-        const val selectProducerByIdQuery: String = "SELECT id, name, email, document FROM producer WHERE id = :id"
+        const val selectProducerByIdQuery = "SELECT id, name, email, document FROM producer WHERE id = :id"
         const val selectAllProducersQuery = "SELECT id, name, email, document FROM producer"
         const val insertProducerQuery = "INSERT INTO producer(name, email, document) VALUES (?, ?, ?) RETURNING id, name, email, document"
         const val updateProducerQuery = "UPDATE producer SET name = ?, email = ?, document = ? WHERE id = ? RETURNING id, name, email, document"

@@ -1,6 +1,6 @@
 package com.example.eventproject.form
 
-import com.example.eventproject.exception.ResourceCreateException
+import com.example.eventproject.extensions.jsonExtension.checkJsonErrors
 import com.fasterxml.jackson.databind.JsonNode
 
 data class ProducerForm(
@@ -8,29 +8,23 @@ data class ProducerForm(
         val email: String,
         val document: String
 ) {
-
     companion object {
         operator fun invoke(data: JsonNode): ProducerForm {
 
-            val errors: MutableList<String> = mutableListOf<String>()
+            val expectedJson: List<String> = listOf("name", "email", "document")
 
-            if (!data.has("name"))
-                errors.add("name")
-            if (!data.has("email"))
-                errors.add("email")
-            if (!data.has("document"))
-                errors.add("document")
+            val errors = data.checkJsonErrors(expectedJson)
 
             if (errors.isEmpty())
                 return ProducerForm(data["name"].textValue(), data["email"].textValue(), data["document"].textValue())
             else
-                throw ResourceCreateException("Missing fields: $errors")
+                throw IllegalArgumentException("Missing fields: $errors")
         }
     }
 
     init {
-        if(name.isEmpty() || email.isEmpty() || document.isEmpty())
-            throw ResourceCreateException("The required fields can not be empty")
+        if (name.isEmpty() || email.isEmpty() || document.isEmpty())
+            throw IllegalArgumentException("The required fields can not be empty")
     }
 
     override fun equals(other: Any?): Boolean {
