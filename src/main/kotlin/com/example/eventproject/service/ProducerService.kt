@@ -28,12 +28,8 @@ class ProducerService(private val producerRepository: ProducerRepository) {
                 ?: throw ResourceUpdateException("Updating error: $id")
     }
 
-    fun deleteProducer(id: UUID): Int {
-        val statusDelete = producerRepository.deleteProducer(id)
-
-        if (statusDelete == 0)
+    fun deleteProducer(id: UUID) {
+        if (producerRepository.deleteProducer(id) == 0)
             throw ResourceNotFoundException("Not found producer with id: $id")
-
-        return statusDelete
     }
 }
