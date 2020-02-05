@@ -1,6 +1,7 @@
 package com.example.eventproject.model
 
-import java.util.*
+import java.util.UUID
+import java.util.Date
 
 data class Event(
         val id: UUID,

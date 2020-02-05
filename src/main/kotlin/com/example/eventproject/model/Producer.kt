@@ -1,6 +1,6 @@
 package com.example.eventproject.model
 
-import java.util.*
+import java.util.UUID
 
 data class Producer(
         val id: UUID,
