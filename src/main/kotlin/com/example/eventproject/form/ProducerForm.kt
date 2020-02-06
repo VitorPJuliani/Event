@@ -1,6 +1,6 @@
 package com.example.eventproject.form
 
-import com.example.eventproject.extensions.jsonExtension.checkJsonErrors
+import com.example.eventproject.extensions.jsonExtension.checkForJsonFieldErrors
 import com.fasterxml.jackson.databind.JsonNode
 
 data class ProducerForm(
@@ -10,20 +10,16 @@ data class ProducerForm(
 ) {
     companion object {
         operator fun invoke(data: JsonNode): ProducerForm {
-
             val expectedJson: List<String> = listOf("name", "email", "document")
 
-            val errors = data.checkJsonErrors(expectedJson)
+            data.checkForJsonFieldErrors(expectedJson)
 
-            if (errors.isEmpty())
-                return ProducerForm(data["name"].textValue(), data["email"].textValue(), data["document"].textValue())
-            else
-                throw IllegalArgumentException("Missing fields: $errors")
+            return ProducerForm(data["name"].textValue(), data["email"].textValue(), data["document"].textValue())
         }
     }
 
     init {
-        if (name.isEmpty() || email.isEmpty() || document.isEmpty())
+        if (this.name.isEmpty() || this.email.isEmpty() || this.document.isEmpty())
             throw IllegalArgumentException("The required fields can not be empty")
     }
 

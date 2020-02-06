@@ -2,7 +2,7 @@ package com.example.eventproject.extensions.jsonExtension
 
 import com.fasterxml.jackson.databind.JsonNode
 
-fun JsonNode.checkJsonErrors(expectedJson: List<String>): List<String> {
+fun JsonNode.checkForJsonFieldErrors(expectedJson: List<String>) {
 
     val missingFields: MutableList<String> = mutableListOf()
 
@@ -11,5 +11,6 @@ fun JsonNode.checkJsonErrors(expectedJson: List<String>): List<String> {
             missingFields.add(it)
     }
 
-    return missingFields
+    if (missingFields.isNotEmpty())
+        throw IllegalArgumentException("Missing fields: $missingFields")
 }
