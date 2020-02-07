@@ -2,6 +2,7 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -28,8 +29,12 @@ class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerR
 
         val namedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-        return namedParameterJdbcTemplate.queryForObject(selectProducerByIdQuery, parameter) { rs: ResultSet, _: Int ->
-            Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
+        return try {
+            namedParameterJdbcTemplate.queryForObject(selectProducerByIdQuery, parameter) { rs: ResultSet, _: Int ->
+                Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
+            }
+        } catch (e: EmptyResultDataAccessException) {
+            null
         }
     }
 
