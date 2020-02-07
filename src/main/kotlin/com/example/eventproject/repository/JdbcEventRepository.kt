@@ -2,6 +2,7 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -27,12 +28,16 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
 
         val namedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-        return namedParameterJdbcTemplate.queryForObject(selectEventByIdQuery, parameter) { rs: ResultSet, _: Int ->
-            Event(rs.getObject("id", UUID::class.java),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getObject("date", LocalDate::class.java),
-                    rs.getObject("producer", UUID::class.java))
+        return try {
+            namedParameterJdbcTemplate.queryForObject(selectEventByIdQuery, parameter) { rs: ResultSet, _: Int ->
+                Event(rs.getObject("id", UUID::class.java),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getObject("date", LocalDate::class.java),
+                        rs.getObject("producer", UUID::class.java))
+            }
+        } catch (e: EmptyResultDataAccessException) {
+            null
         }
     }
 
