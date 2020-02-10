@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException
 internal class EventFormTest {
 
     @Test
-    fun eventFormConstructorWithCorrectBodyShouldNotReturnException() {
+    fun eventFormConstructorWithCorrectBodyShouldNotThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -27,7 +27,7 @@ internal class EventFormTest {
     }
 
     @Test
-    fun eventFormConstructorWithMissingFieldsBodyShouldReturnException() {
+    fun eventFormConstructorWithMissingFieldsBodyShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -43,7 +43,7 @@ internal class EventFormTest {
     }
 
     @Test
-    fun eventFormConstructorWithDateErrorFormatShouldReturnException() {
+    fun eventFormConstructorWithDateErrorFormatShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -60,7 +60,7 @@ internal class EventFormTest {
     }
 
     @Test
-    fun eventFormConstructorWithUuidErrorFormatShouldReturnException() {
+    fun eventFormConstructorWithUuidErrorFormatShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -77,7 +77,7 @@ internal class EventFormTest {
     }
 
     @Test
-    fun eventFormConstructorWithEmpyFieldsShouldReturnException() {
+    fun eventFormConstructorWithEmpyFieldsShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 

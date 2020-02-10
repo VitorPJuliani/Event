@@ -45,7 +45,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `find producer by id with nonexistent id should return ResourceNotFoundException`() {
+    fun `find producer by id with nonexistent id should throw ResourceNotFoundException when id not found`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -77,7 +77,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `save producer with response null should return ResourceCreateException`() {
+    fun `save producer with response null should throw ResourceCreateException when repository response is null`() {
         every {
             repository.saveProducer(producerForm)
         } returns null
@@ -100,7 +100,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `update producer with response null should return ResourceUpdateException`() {
+    fun `update producer with response null should throw ResourceUpdateException when repository response is null`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -114,7 +114,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `delete producer with correct id should not return ResourceNotFoundExceptrion`() {
+    fun `delete producer with correct id should not throw ResourceNotFoundExceptrion`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -127,7 +127,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `delete producer with nonexistent id should return ResourceNotFoundException`() {
+    fun `delete producer with nonexistent id should throw ResourceNotFoundException when repository response is 0`() {
         val uuid = UUID.randomUUID()
 
         every {

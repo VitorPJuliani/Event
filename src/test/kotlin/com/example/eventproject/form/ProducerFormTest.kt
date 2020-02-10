@@ -9,7 +9,7 @@ import java.lang.IllegalArgumentException
 internal class ProducerFormTest {
 
     @Test
-    fun producerFormConstructorWithCorrectBodyShouldNotReturnException() {
+    fun producerFormConstructorWithCorrectBodyShouldNotThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -25,7 +25,7 @@ internal class ProducerFormTest {
     }
 
     @Test
-    fun producerFormConstructorWithMissingFieldsShouldReturnException() {
+    fun producerFormConstructorWithMissingFieldsShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -40,7 +40,7 @@ internal class ProducerFormTest {
     }
 
     @Test
-    fun producerFormConstructorWithEmptyFieldsShouldReturnException() {
+    fun producerFormConstructorWithEmptyFieldsShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -56,7 +56,7 @@ internal class ProducerFormTest {
     }
 
     @Test
-    fun producerFormConstructorWithEmailErrorFormatShouldReturnException() {
+    fun producerFormConstructorWithEmailErrorFormatShouldThrowException() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
