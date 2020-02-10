@@ -33,7 +33,9 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+		exclude(module = "mockito-core")
 	}
+	testImplementation("com.ninja-squad:springmockk:2.0.0")
 }
 
 tasks.withType<Test> {

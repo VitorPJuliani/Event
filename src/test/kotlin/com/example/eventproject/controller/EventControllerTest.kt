@@ -46,4 +46,28 @@ internal class EventControllerTest(@Autowired
                 .andExpect(jsonPath("$[1].name").value(events[1].name))
                 .andExpect(jsonPath("$[2].description").value(events[2].description))
     }
+
+    @Test
+    fun `get event by id when id exists should return 200`() {
+
+        val uuid = UUID.randomUUID()
+
+        val event = Event(
+                id = uuid,
+                name = "name",
+                description = "description",
+                date = LocalDate.parse("2020-02-10"),
+                producer = UUID.randomUUID()
+        )
+
+        every {
+            service.findEventById(uuid)
+        } returns event
+
+        this.mockMvc.perform(get("/events/$uuid"))
+                .andExpect(status().isOk)
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(event.id.toString()))
+                .andExpect(jsonPath("$.name").value(event.name))
+    }
 }
