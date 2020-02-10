@@ -44,7 +44,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun findEventByIdWithCorrectIdShouldReturnEventObject() {
+    fun `find event by id when id exists should return event object`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -55,7 +55,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun findEventByIdWithNonexistentIdShouldThrowResourceNotFoundException() {
+    fun `find event by id when id is nonexistent should throw ResourceNotFoundException`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -69,7 +69,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun findAllEventsShouldReturnListOfEvents() {
+    fun `find all events should return list of Events`() {
         every {
             repository.findAllEvents()
         } returns listOf()
@@ -78,7 +78,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun saveEventWithCorrectBodyShouldReturnEventObject() {
+    fun `save event when correct body should return event object`() {
         every {
             repository.saveEvent(eventForm)
         } returns event
@@ -87,7 +87,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun saveEventWithNullReturnShouldThrowResourceCreateException() {
+    fun `save event when repository response is null should throw ResourceCreateException`() {
         every {
             repository.saveEvent(eventForm)
         } returns null
@@ -99,7 +99,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun updateEventWithCorrectBodyShouldReturnEventObject() {
+    fun `update event when correct body should return event object`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -110,7 +110,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun updateEventWithNullReturnsShouldThrowResourceUpdateException() {
+    fun `update event when repository response is null should throw ResourceUpdateException`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -124,7 +124,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun deleteEventWithCorrectIdShouldNotThrowResourceNotFoundException() {
+    fun `delete event when correct id should not throw ResourceNotFoundExceptrion`() {
         val uuid = UUID.randomUUID()
 
         every {
@@ -137,7 +137,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun deleteEventWithIncorrectIdShouldThrowResourceNotFoundException() {
+    fun `delete event when repository reponse is 0 id should throw ResourceNotFoundException`() {
         val uuid = UUID.randomUUID()
 
         every {
