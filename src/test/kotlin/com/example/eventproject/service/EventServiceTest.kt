@@ -6,10 +6,12 @@ import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
 import com.example.eventproject.repository.EventRepository
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.LocalDate
@@ -35,6 +37,11 @@ internal class EventServiceTest {
     private val repository: EventRepository = mockk()
 
     private val service: EventService = EventService(repository)
+
+    @BeforeEach
+    fun init() {
+        clearMocks(repository)
+    }
 
     @Test
     fun findEventByIdWithCorrectIdShouldReturnEventObject() {
