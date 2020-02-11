@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.springframework.boot.test.context.SpringBootTest
 
 internal class JsonExtensionKtTest {
 
     private val expectedJson = listOf<String>("name", "document", "email")
 
     @Test
-    fun checkJsonErrorsWithCorrectJsonShouldNotReturnException() {
+    fun `check for json errors when correct fields should not throw IllegalArgumentException`() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -27,7 +26,7 @@ internal class JsonExtensionKtTest {
     }
 
     @Test
-    fun checkJsonErrorsWithMissingFieldsShouldReturnException() {
+    fun `check for json errors when missing fields should throw IllegalArgumentException`() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
