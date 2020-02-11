@@ -1,5 +1,6 @@
 package com.example.eventproject.controller
 
+import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.model.Event
 import com.example.eventproject.service.EventService
 import com.ninjasquad.springmockk.MockkBean
@@ -69,5 +70,18 @@ internal class EventControllerTest(@Autowired
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(event.id.toString()))
                 .andExpect(jsonPath("$.name").value(event.name))
+    }
+
+    @Test
+    fun `get event by id when id is nonexistent should return 400`() {
+
+        val uuid = UUID.randomUUID()
+
+        every {
+            service.findEventById(uuid)
+        } throws ResourceNotFoundException("Invalid Id")
+
+        this.mockMvc.perform(get("/{id}", uuid))
+                .andExpect(status().isNotFound)
     }
 }

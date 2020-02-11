@@ -137,7 +137,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun `delete event when repository reponse is 0 id should throw ResourceNotFoundException`() {
+    fun `delete event when repository response is 0 id should throw ResourceNotFoundException`() {
         val uuid = UUID.randomUUID()
 
         every {
