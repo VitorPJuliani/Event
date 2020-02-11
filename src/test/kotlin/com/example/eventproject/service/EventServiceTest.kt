@@ -124,7 +124,7 @@ internal class EventServiceTest {
     }
 
     @Test
-    fun `delete event when correct id should not throw ResourceNotFoundExceptrion`() {
+    fun `delete event when correct id should not throw ResourceNotFoundException`() {
         val uuid = UUID.randomUUID()
 
         every {

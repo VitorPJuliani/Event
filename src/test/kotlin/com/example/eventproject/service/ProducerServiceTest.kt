@@ -134,7 +134,7 @@ internal class ProducerServiceTest {
     }
 
     @Test
-    fun `delete producer when repository reponse is 0 id should throw ResourceNotFoundException`() {
+    fun `delete producer when repository response is 0 id should throw ResourceNotFoundException`() {
         val uuid = UUID.randomUUID()
 
         every {
