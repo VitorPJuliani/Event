@@ -257,7 +257,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     }
 
     @Test
-    fun `delete event should return 200`() {
+    fun `delete event should return 204`() {
 
         val uuid = UUID.randomUUID()
 
