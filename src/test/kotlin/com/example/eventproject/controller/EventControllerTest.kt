@@ -145,7 +145,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     }
 
     @Test
-    fun `post event when serive returns null should return 400`() {
+    fun `post event when service throws ResourceCreateException should return 400`() {
 
         val node = objectMapper.createObjectNode()
 
@@ -229,7 +229,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     }
 
     @Test
-    fun `put event when service returns null should return 400`() {
+    fun `put event when service throws ResourceUpdateException should return 400`() {
 
         val uuid = UUID.randomUUID()
 
