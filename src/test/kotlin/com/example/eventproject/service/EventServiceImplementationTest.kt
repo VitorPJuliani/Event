@@ -17,7 +17,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.LocalDate
 import java.util.UUID
 
-internal class EventServiceTest {
+internal class EventServiceImplementationTest {
 
     private val event = Event(
             id = UUID.randomUUID(),
@@ -36,7 +36,7 @@ internal class EventServiceTest {
 
     private val repository: EventRepository = mockk()
 
-    private val service: EventService = EventService(repository)
+    private val service: EventService = EventServiceImplementation(repository)
 
     @BeforeEach
     fun init() {

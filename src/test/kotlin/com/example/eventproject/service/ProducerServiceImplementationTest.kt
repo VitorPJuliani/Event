@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import java.util.UUID
 
-internal class ProducerServiceTest {
+internal class ProducerServiceImplementationTest {
 
     private val producerForm = ProducerForm(
             name = "Vitor",
@@ -33,7 +33,7 @@ internal class ProducerServiceTest {
 
     private val repository = mockk<ProducerRepository>()
 
-    private val service = ProducerService(repository)
+    private val service = ProducerServiceImplementation(repository)
 
     @BeforeEach
     fun init() {
