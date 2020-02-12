@@ -17,7 +17,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.LocalDate
 import java.util.UUID
 
-internal class EventServiceTest {
+internal class EventServiceImplementationTest {
 
     private val event = Event(
             id = UUID.randomUUID(),
