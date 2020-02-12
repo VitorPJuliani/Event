@@ -36,7 +36,7 @@ internal class EventServiceTest {
 
     private val repository: EventRepository = mockk()
 
-    private val service: EventService = EventService(repository)
+    private val service: EventService = EventServiceImplementation(repository)
 
     @BeforeEach
     fun init() {

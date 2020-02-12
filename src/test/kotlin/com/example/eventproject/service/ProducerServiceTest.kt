@@ -33,7 +33,7 @@ internal class ProducerServiceTest {
 
     private val repository = mockk<ProducerRepository>()
 
-    private val service = ProducerService(repository)
+    private val service = ProducerServiceImplementation(repository)
 
     @BeforeEach
     fun init() {
