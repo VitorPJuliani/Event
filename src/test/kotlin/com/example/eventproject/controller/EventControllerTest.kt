@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
@@ -44,7 +45,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.findAllEvents()
         } returns events
 
-        this.mockMvc.perform(get("/events"))
+        mockMvc.perform(get("/events"))
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray)
@@ -71,7 +72,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.findEventById(uuid)
         } returns event
 
-        this.mockMvc.perform(get("/events/$uuid"))
+        mockMvc.perform(get("/events/$uuid"))
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(event.id.toString()))
@@ -79,7 +80,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     }
 
     @Test
-    fun `get event by id when id is nonexistent should return 400`() {
+    fun `get event by id when id is nonexistent should return 404`() {
 
         val uuid = UUID.randomUUID()
 
@@ -87,7 +88,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.findEventById(uuid)
         } throws ResourceNotFoundException("Invalid Id")
 
-        this.mockMvc.perform(get("/events/{id}", uuid))
+        mockMvc.perform(get("/events/{id}", uuid))
                 .andExpect(status().isNotFound)
     }
 
@@ -119,7 +120,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.saveEvent(eventForm)
         } returns event
 
-        this.mockMvc.perform(post("/events")
+        mockMvc.perform(post("/events")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(node)))
@@ -138,7 +139,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("date", "2020-02-10")
         }
 
-        this.mockMvc.perform(post("/events")
+        mockMvc.perform(post("/events")
                 .content(objectMapper.writeValueAsString(node))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -163,7 +164,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.saveEvent(event)
         } throws ResourceCreateException("Creating error")
 
-        this.mockMvc.perform(post("/events")
+        mockMvc.perform(post("/events")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(node)))
@@ -200,7 +201,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.updateEvent(eventForm, uuid)
         } returns event
 
-        this.mockMvc.perform(put("/events/{id}", uuid)
+        mockMvc.perform(put("/events/{id}", uuid)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(node)))
@@ -220,7 +221,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("date", "2020-02-10")
         }
 
-        this.mockMvc.perform(put("/events/{id}", UUID.randomUUID())
+        mockMvc.perform(put("/events/{id}", UUID.randomUUID())
                 .content(objectMapper.writeValueAsString(node))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -247,10 +248,36 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             service.updateEvent(event, uuid)
         } throws ResourceUpdateException("Updating error")
 
-        this.mockMvc.perform(put("/events/{id}", uuid)
+        mockMvc.perform(put("/events/{id}", uuid)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(node)))
                 .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `delete event should return 200`() {
+
+        val uuid = UUID.randomUUID()
+
+        every {
+            service.deleteEvent(uuid)
+        } returns Unit
+
+        mockMvc.perform(delete("/events/$uuid"))
+                .andExpect(status().isNoContent)
+    }
+
+    @Test
+    fun `delete event when id is nonexistent should return 404`() {
+
+        val uuid = UUID.randomUUID()
+
+        every {
+            service.deleteEvent(uuid)
+        } throws ResourceNotFoundException("not found id $uuid")
+
+        mockMvc.perform(delete("/events/$uuid"))
+                .andExpect(status().isNotFound)
     }
 }
