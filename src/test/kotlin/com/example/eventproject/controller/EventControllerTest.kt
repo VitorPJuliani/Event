@@ -13,6 +13,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delet
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -50,9 +52,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray)
                 .andExpect(jsonPath("$", hasSize<Any>(3)))
-                .andExpect(jsonPath("$[0].id").value(events[0].id.toString()))
-                .andExpect(jsonPath("$[1].name").value(events[1].name))
-                .andExpect(jsonPath("$[2].description").value(events[2].description))
+                .andExpect(content().json(objectMapper.writeValueAsString(events)))
     }
 
     @Test
@@ -75,8 +75,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
         mockMvc.perform(get("/events/$uuid"))
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(event.id.toString()))
-                .andExpect(jsonPath("$.name").value(event.name))
+                .andExpect(content().json(objectMapper.writeValueAsString(event)))
     }
 
     @Test
@@ -90,6 +89,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
 
         mockMvc.perform(get("/events/{id}", uuid))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.message").value("Invalid Id"))
     }
 
     @Test
@@ -226,6 +226,8 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest)
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.timestamp").exists())
     }
 
     @Test
@@ -253,6 +255,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(node)))
                 .andExpect(status().isBadRequest)
+                .andExpect(jsonPath("$.message").value("Updating error"))
     }
 
     @Test
@@ -279,5 +282,6 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
 
         mockMvc.perform(delete("/events/$uuid"))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.message").value("not found id $uuid"))
     }
 }
