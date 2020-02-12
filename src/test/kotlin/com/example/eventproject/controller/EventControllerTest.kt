@@ -13,7 +13,6 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delet
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -93,7 +91,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     }
 
     @Test
-    fun `post event should return 200`() {
+    fun `post event should return 201`() {
 
         val producerUuid = UUID.randomUUID()
 
