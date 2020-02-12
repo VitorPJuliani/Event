@@ -9,7 +9,7 @@ import java.lang.IllegalArgumentException
 internal class ProducerFormTest {
 
     @Test
-    fun `producer form constructor when fields are correct should not throw excpetion`() {
+    fun `producer form constructor when fields are correct should not throw exception`() {
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
