@@ -2,6 +2,7 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.form.ProducerForm
+import com.example.eventproject.model.Producer
 import org.assertj.core.api.Assertions.assertThat
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
@@ -48,17 +49,9 @@ class JdbcEventRepositoyTest {
     @Test
     fun saveEvent() {
 
-        val producerForm = ProducerForm(
-                name = "name",
-                email = "email@email.com",
-                document = "123456"
-        )
+        val producer = saveProducer()
 
-        val id = producerRepository.saveProducer(producerForm)?.id
-
-        assertThat(id).isNotNull()
-
-        val eventForm = id?.let {
+        val eventForm = producer?.id?.let {
             EventForm(
                     name = "name",
                     description = "description",
@@ -72,5 +65,43 @@ class JdbcEventRepositoyTest {
         }
 
         assertThat(event?.name).isEqualTo("name")
+    }
+
+    @Test
+    fun updateEvent() {
+
+        val producer = saveProducer()
+
+        val eventForm = producer?.id?.let {
+            EventForm(
+                    name = "name",
+                    description = "description",
+                    date = LocalDate.parse("2020-02-18"),
+                    producer = it
+            )
+        }
+
+        val event = eventForm?.let {
+            eventRepository.saveEvent(it)
+        }
+
+        eventForm?.apply {
+            name = "updated name"
+        }
+
+        val updatedEvent = eventForm?.let { event?.id?.let { it1 -> eventRepository.updateEvent(it, it1) } }
+
+        assertThat(updatedEvent?.name).isEqualTo("updated name")
+
+    }
+
+    private fun saveProducer(): Producer? {
+        val producerForm = ProducerForm(
+                name = "name",
+                email = "email@email.com",
+                document = "123456"
+        )
+
+        return producerRepository.saveProducer(producerForm)
     }
 }
