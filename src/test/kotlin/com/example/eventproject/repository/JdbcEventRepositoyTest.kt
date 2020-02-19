@@ -112,11 +112,37 @@ class JdbcEventRepositoyTest {
             eventRepository.saveEvent(it)
         }
 
-        val status = event?.id?.let{
+        val status = event?.id?.let {
             eventRepository.deleteEvent(it)
         }
 
         assertThat(status).isEqualTo(1)
+    }
+
+    @Test
+    fun findEventById() {
+
+        val producer = saveProducer()
+
+        val eventForm = producer?.id?.let {
+            EventForm(
+                    name = "name",
+                    description = "description",
+                    date = LocalDate.parse("2020-02-18"),
+                    producer = it
+            )
+        }
+
+        val event = eventForm?.let {
+            eventRepository.saveEvent(it)
+        }
+
+        val eventResult = event?.id?.let {
+            eventRepository.findEventById(it)
+        }
+
+        assertThat(eventResult).isNotNull
+        assertThat(eventResult?.name).isEqualTo("name")
     }
 
     private fun saveProducer(): Producer? {
