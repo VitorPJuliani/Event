@@ -54,11 +54,11 @@ class JdbcEventRepositoyTest {
                 document = "123456"
         )
 
-        val producer = producerRepository.saveProducer(producerForm)
+        val id = producerRepository.saveProducer(producerForm)?.id
 
-        assertThat(producer).isNotNull
+        assertThat(id).isNotNull()
 
-        val event = producer?.id?.let {
+        val event = id?.let {
             EventForm(
                     name = "name",
                     description = "description",
