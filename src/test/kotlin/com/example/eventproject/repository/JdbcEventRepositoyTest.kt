@@ -58,7 +58,7 @@ class JdbcEventRepositoyTest {
 
         assertThat(id).isNotNull()
 
-        val event = id?.let {
+        val eventForm = id?.let {
             EventForm(
                     name = "name",
                     description = "description",
@@ -67,6 +67,10 @@ class JdbcEventRepositoyTest {
             )
         }
 
-        assertThat(event?.let { it -> eventRepository.saveEvent(it).let { it?.name } }).isEqualTo("name")
+        val event = eventForm?.let {
+            eventRepository.saveEvent(it)
+        }
+
+        assertThat(event?.name).isEqualTo("name")
     }
 }
