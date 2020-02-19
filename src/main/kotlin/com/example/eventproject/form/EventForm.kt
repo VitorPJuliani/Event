@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException
 import java.util.UUID
 
 data class EventForm(
-        var name: String,
+        val name: String,
         val description: String,
         val date: LocalDate,
         val producer: UUID

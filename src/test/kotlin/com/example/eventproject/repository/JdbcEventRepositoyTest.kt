@@ -91,13 +91,62 @@ class JdbcEventRepositoyTest {
             eventRepository.saveEvent(it)
         }
 
-        eventForm?.apply {
-            name = "updated name"
+        val queryEventForm = producer?.id?.let {
+            EventForm(
+                    name = "updated name",
+                    description = "description",
+                    date = LocalDate.parse("2020-02-18"),
+                    producer = it
+            )
         }
 
-        val updatedEvent = eventForm?.let { event?.id?.let { it1 -> eventRepository.updateEvent(it, it1) } }
+        val updatedEvent = queryEventForm?.let { form ->
+            event?.id?.let { id ->
+                eventRepository.updateEvent(form, id)
+            }
+        }
 
         assertThat(updatedEvent?.name).isEqualTo("updated name")
+    }
+
+    @Test
+    fun updateEventWhenIdIsNonexistent() {
+
+        val producer = producerRepository.saveProducer(producerForm)
+
+        val eventForm = producer?.id?.let {
+            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+        }?.also {
+            eventRepository.saveEvent(it)
+        }
+
+        val event = eventForm?.let {
+            eventRepository.updateEvent(it, UUID.randomUUID())
+        }
+
+        assertThat(event).isNull()
+    }
+
+    @Test
+    fun updateEventWhenIncorrectBody() {
+
+        val savedProducer = producerRepository.saveProducer(producerForm)
+
+        val eventForm = savedProducer?.id?.let {
+            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+        }
+
+        val savedEvent = eventForm?.let {
+            eventRepository.saveEvent(eventForm)
+        }
+
+        val queryEventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = UUID.randomUUID())
+
+        val event = savedEvent?.id?.let { id ->
+            eventRepository.updateEvent(queryEventForm, id)
+        }
+
+        assertThat(event).isNull()
     }
 
     @Test
