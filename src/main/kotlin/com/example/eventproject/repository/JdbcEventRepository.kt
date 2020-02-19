@@ -60,17 +60,19 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
             preparedStatement.setObject(3, event.date)
             preparedStatement.setObject(4, event.producer)
 
-            val rs = preparedStatement.executeQuery()
+            try {
+                val rs = preparedStatement.executeQuery()
 
-            if (rs.next())
+                rs.next()
+
                 Event(rs.getObject("id", UUID::class.java),
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getObject("date", LocalDate::class.java),
                         rs.getObject("producer", UUID::class.java))
-            else
+            } catch (e: SQLException) {
                 null
-
+            }
         }
     }
 
