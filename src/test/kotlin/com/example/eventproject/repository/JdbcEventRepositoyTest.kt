@@ -74,6 +74,16 @@ class JdbcEventRepositoyTest {
     }
 
     @Test
+    fun saveEventWhenIncorrectBody() {
+
+        val eventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-19"), producer = UUID.randomUUID())
+
+        val event = eventRepository.saveEvent(eventForm)
+
+        assertThat(event).isNull()
+    }
+
+    @Test
     fun updateEvent() {
 
         val producer = producerRepository.saveProducer(producerForm)
