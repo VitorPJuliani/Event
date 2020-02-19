@@ -4,7 +4,7 @@ import com.example.eventproject.extensions.jsonExtension.checkForJsonFieldErrors
 import com.fasterxml.jackson.databind.JsonNode
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
-import java.util.*
+import java.util.UUID
 
 data class EventForm(
         val name: String,
