@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import java.sql.Connection
 import java.sql.ResultSet
+import java.sql.SQLException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -69,6 +70,7 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
                         rs.getObject("producer", UUID::class.java))
             else
                 null
+
         }
     }
 
@@ -81,16 +83,20 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
             preparedStatement.setObject(4, event.producer)
             preparedStatement.setObject(5, id)
 
-            val rs = preparedStatement.executeQuery()
+            try {
+                val rs = preparedStatement.executeQuery()
 
-            if (rs.next())
-                Event(rs.getObject("id", UUID::class.java),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getObject("date", LocalDate::class.java),
-                        rs.getObject("producer", UUID::class.java))
-            else
+                if (rs.next())
+                    Event(rs.getObject("id", UUID::class.java),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getObject("date", LocalDate::class.java),
+                            rs.getObject("producer", UUID::class.java))
+                else
+                    null
+            } catch (e: SQLException) {
                 null
+            }
         }
     }
 
