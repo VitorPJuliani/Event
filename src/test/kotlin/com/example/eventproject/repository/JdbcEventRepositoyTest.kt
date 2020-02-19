@@ -245,7 +245,6 @@ class JdbcEventRepositoyTest {
 
         val eventsResult = eventRepository.findAllEvents()
 
-        assertThat(eventsResult).isNotEmpty
-        assertThat(eventsResult.last().name).isEqualTo("name 3")
+        assertThat(eventsResult).hasSize(3)
     }
 }
