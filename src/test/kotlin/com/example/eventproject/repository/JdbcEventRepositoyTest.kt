@@ -6,12 +6,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.jdbc.DataSourceBuilder
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDate
+import java.util.UUID
 
 @Testcontainers
 class JdbcEventRepositoyTest {
@@ -148,6 +151,14 @@ class JdbcEventRepositoyTest {
 
         assertThat(eventResult).isNotNull
         assertThat(eventResult?.name).isEqualTo("name")
+    }
+
+    @Test
+    fun findEventByIdWhenIdIsNonexistent() {
+
+        val eventResult = eventRepository.findEventById(UUID.randomUUID())
+
+        assertThat(eventResult).isNull()
     }
 
     @Test
