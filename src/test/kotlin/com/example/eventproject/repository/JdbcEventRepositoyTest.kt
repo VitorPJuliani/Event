@@ -2,7 +2,6 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.form.ProducerForm
-import com.example.eventproject.model.Producer
 import org.assertj.core.api.Assertions.assertThat
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.BeforeEach
@@ -27,6 +26,12 @@ class JdbcEventRepositoyTest {
     private lateinit var eventRepository: JdbcEventRepository
     private lateinit var producerRepository: JdbcProducerRepository
 
+    private val producerForm = ProducerForm(
+            name = "name",
+            email = "email@email.com",
+            document = "123456"
+    )
+
     @BeforeEach
     fun start() {
         postgreSQLContainer.start()
@@ -49,7 +54,7 @@ class JdbcEventRepositoyTest {
     @Test
     fun saveEvent() {
 
-        val producer = saveProducer()
+        val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
             EventForm(
@@ -70,7 +75,7 @@ class JdbcEventRepositoyTest {
     @Test
     fun updateEvent() {
 
-        val producer = saveProducer()
+        val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
             EventForm(
@@ -97,7 +102,7 @@ class JdbcEventRepositoyTest {
     @Test
     fun deleteEvent() {
 
-        val producer = saveProducer()
+        val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
             EventForm(
@@ -122,7 +127,7 @@ class JdbcEventRepositoyTest {
     @Test
     fun findEventById() {
 
-        val producer = saveProducer()
+        val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
             EventForm(
@@ -145,13 +150,26 @@ class JdbcEventRepositoyTest {
         assertThat(eventResult?.name).isEqualTo("name")
     }
 
-    private fun saveProducer(): Producer? {
-        val producerForm = ProducerForm(
-                name = "name",
-                email = "email@email.com",
-                document = "123456"
-        )
+    @Test
+    fun findAllEvents() {
 
-        return producerRepository.saveProducer(producerForm)
+        val producer = producerRepository.saveProducer(producerForm)
+
+        val events = producer?.id?.let {
+            listOf(
+                    EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it),
+                    EventForm(name = "name 2", description = "description", date = LocalDate.parse("2020-02-18"), producer = it),
+                    EventForm(name = "name 3", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+            )
+        }
+
+        events?.forEach {
+            eventRepository.saveEvent(it)
+        }
+
+        val eventsResult = eventRepository.findAllEvents()
+
+        assertThat(eventsResult).isNotEmpty
+        assertThat(eventsResult.last().name).isEqualTo("name 3")
     }
 }
