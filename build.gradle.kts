@@ -42,7 +42,6 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:2.0.0")
     testImplementation("org.assertj:assertj-core:3.11.1")
 
-//    implementation(platform("org.testcontainers:testcontainers-bom:1.12.5"))
     testImplementation("org.testcontainers:postgresql:1.12.5")
     testImplementation("org.testcontainers:junit-jupiter:1.12.5")
 }
