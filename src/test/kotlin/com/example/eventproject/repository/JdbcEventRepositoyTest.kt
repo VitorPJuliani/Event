@@ -20,18 +20,10 @@ class JdbcEventRepositoyTest {
     @Container
     private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:9.6-alpine").apply {
         withDatabaseName("eventprojecttest")
-        withUsername("username")
-        withPassword("password")
     }
 
     private lateinit var eventRepository: JdbcEventRepository
     private lateinit var producerRepository: JdbcProducerRepository
-
-    private val producerForm = ProducerForm(
-            name = "name",
-            email = "email@email.com",
-            document = "123456"
-    )
 
     @BeforeEach
     fun start() {
@@ -54,6 +46,8 @@ class JdbcEventRepositoyTest {
 
     @Test
     fun saveEvent() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val producer = producerRepository.saveProducer(producerForm)
 
@@ -85,6 +79,8 @@ class JdbcEventRepositoyTest {
 
     @Test
     fun updateEvent() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val producer = producerRepository.saveProducer(producerForm)
 
@@ -122,6 +118,8 @@ class JdbcEventRepositoyTest {
     @Test
     fun updateEventWhenIdIsNonexistent() {
 
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
+
         val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
@@ -139,6 +137,8 @@ class JdbcEventRepositoyTest {
 
     @Test
     fun updateEventWhenIncorrectBody() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val savedProducer = producerRepository.saveProducer(producerForm)
 
@@ -161,6 +161,8 @@ class JdbcEventRepositoyTest {
 
     @Test
     fun deleteEvent() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val producer = producerRepository.saveProducer(producerForm)
 
@@ -187,13 +189,15 @@ class JdbcEventRepositoyTest {
     @Test
     fun deleteEventWhenIdIsNonexistent() {
 
-        val status = eventRepository.findEventById(UUID.randomUUID())
+        val status = eventRepository.deleteEvent(UUID.randomUUID())
 
-        assertThat(status).isNull()
+        assertThat(status).isEqualTo(0)
     }
 
     @Test
     fun findEventById() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val producer = producerRepository.saveProducer(producerForm)
 
@@ -228,6 +232,8 @@ class JdbcEventRepositoyTest {
 
     @Test
     fun findAllEvents() {
+
+        val producerForm = ProducerForm(name = "name", email = "email@email.com", document = "123456")
 
         val producer = producerRepository.saveProducer(producerForm)
 

@@ -8,6 +8,7 @@ class EventprojectApplicationTests {
 
 	@Test
 	fun contextLoads() {
+
 	}
 
 }
