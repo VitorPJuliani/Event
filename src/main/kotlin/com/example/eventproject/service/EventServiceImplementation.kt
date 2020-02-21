@@ -9,6 +9,7 @@ import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
 import com.example.eventproject.repository.EventRepository
 import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import java.util.UUID
 
@@ -28,14 +29,17 @@ open class EventServiceImplementation(private val eventRepository: EventReposito
         return eventRepository.findAllEvents()
     }
 
+    @CacheEvict(allEntries = true)
     override fun saveEvent(event: EventForm): Event {
         return eventRepository.saveEvent(event) ?: throw ResourceCreateException("Creating error")
     }
 
+    @CacheEvict(allEntries = true)
     override fun updateEvent(event: EventForm, id: UUID): Event {
         return eventRepository.updateEvent(event, id) ?: throw ResourceUpdateException("Updating error")
     }
 
+    @CacheEvict(allEntries = true)
     override fun deleteEvent(id: UUID) {
         if (eventRepository.deleteEvent(id) == 0)
             throw ResourceNotFoundException("Not found event with id: $id")
