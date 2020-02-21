@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.SQLException
 import java.util.UUID
 
 class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerRepository {
@@ -50,11 +51,16 @@ class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerR
             preparedStatement.setString(2, producer.email)
             preparedStatement.setString(3, producer.document)
 
-            val rs = preparedStatement.executeQuery()
-            if (rs.next())
+            try {
+                val rs = preparedStatement.executeQuery()
+
+                rs.next()
+
                 Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
-            else
+            } catch (e: SQLException) {
                 null
+            }
+
         }
     }
 
@@ -67,11 +73,15 @@ class JdbcProducerRepository(private val jdbcTemplate: JdbcTemplate) : ProducerR
             preparedStatement.setString(3, producer.document)
             preparedStatement.setObject(4, id)
 
-            val rs = preparedStatement.executeQuery()
-            if (rs.next())
-                Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
-            else
+            try {
+                val rs = preparedStatement.executeQuery()
+                if (rs.next())
+                    Producer(rs.getObject("id", UUID::class.java), rs.getString("name"), rs.getString("email"), rs.getString("document"))
+                else
+                    null
+            } catch (e: SQLException) {
                 null
+            }
         }
     }
 
