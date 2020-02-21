@@ -1,19 +1,29 @@
 package com.example.eventproject.service
 
+import com.example.eventproject.configuration.CacheConfiguration
+import com.example.eventproject.configuration.CacheConfiguration.Caches.Companion.producers
 import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
 import com.example.eventproject.repository.ProducerRepository
+import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.Cacheable
 import java.util.UUID
 
-class ProducerServiceImplementation(private val producerRepository: ProducerRepository): ProducerService {
+@CacheConfig (
+        cacheManager = CacheConfiguration.caffeineCacheManager,
+        cacheNames = [producers]
+)
+open class ProducerServiceImplementation(private val producerRepository: ProducerRepository): ProducerService {
 
+    @Cacheable
     override fun findAllProducers(): List<Producer> {
         return producerRepository.findAllProducers()
     }
 
+    @Cacheable
     override fun findProducerById(id: UUID): Producer {
         return producerRepository.findProducerById(id)
                 ?: throw ResourceNotFoundException("Not found producer with id: $id")

@@ -1,19 +1,29 @@
 package com.example.eventproject.service
 
+import com.example.eventproject.configuration.CacheConfiguration.Caches.Companion.events
+import com.example.eventproject.configuration.CacheConfiguration.Companion.caffeineCacheManager
 import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
 import com.example.eventproject.repository.EventRepository
+import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.Cacheable
 import java.util.UUID
 
-class EventServiceImplementation(private val eventRepository: EventRepository): EventService {
+@CacheConfig(
+        cacheManager = caffeineCacheManager,
+        cacheNames = [events]
+)
+open class EventServiceImplementation(private val eventRepository: EventRepository): EventService {
 
+    @Cacheable
     override fun findEventById(id: UUID): Event {
         return eventRepository.findEventById(id) ?: throw ResourceNotFoundException("Not found event with id: $id")
     }
 
+    @Cacheable
     override fun findAllEvents(): List<Event> {
         return eventRepository.findAllEvents()
     }
