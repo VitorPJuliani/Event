@@ -20,6 +20,7 @@ class JdbcEventRepositoyTest {
     @Container
     private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:9.6-alpine").apply {
         withDatabaseName("eventprojecttest")
+        start()
     }
 
     private lateinit var eventRepository: JdbcEventRepository
@@ -27,10 +28,7 @@ class JdbcEventRepositoyTest {
 
     @BeforeEach
     fun start() {
-        postgreSQLContainer.start()
-
         val dataSource = DataSourceBuilder.create()
-                .driverClassName(postgreSQLContainer.driverClassName)
                 .url(postgreSQLContainer.jdbcUrl)
                 .username(postgreSQLContainer.username)
                 .password(postgreSQLContainer.password)
