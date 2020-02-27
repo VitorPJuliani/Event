@@ -4,7 +4,6 @@ import com.example.eventproject.configuration.CacheConfiguration.Caches.Companio
 import com.example.eventproject.configuration.CacheConfiguration.Companion.caffeineCacheManager
 import com.example.eventproject.form.ProducerForm
 import com.example.eventproject.model.Producer
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -14,7 +13,7 @@ import java.util.UUID
         cacheManager = caffeineCacheManager,
         cacheNames = [producers]
 )
-open class CacheProducerServiceImplementation(@Autowired private val producerServiceImplementation: ProducerServiceImplementation): ProducerService {
+open class CacheProducerServiceImplementation(private val producerServiceImplementation: ProducerService): ProducerService {
 
     @Cacheable
     override fun findAllProducers(): List<Producer> {
