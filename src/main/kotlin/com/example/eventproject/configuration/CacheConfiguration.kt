@@ -2,6 +2,7 @@ package com.example.eventproject.configuration
 
 import com.example.eventproject.configuration.CacheConfiguration.Caches.Companion.events
 import com.example.eventproject.configuration.CacheConfiguration.Caches.Companion.producers
+import com.example.eventproject.properties.AppProperties
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
@@ -27,18 +28,18 @@ class CacheConfiguration {
     }
 
     @Bean(caffeineCacheManager)
-    fun cacheManager(): CacheManager {
+    fun cacheManager(appProperties: AppProperties): CacheManager {
         val caffeineCacheManager = CaffeineCacheManager(producers, events)
 
-        caffeineCacheManager.setCaffeine(caffeine())
+        caffeineCacheManager.setCaffeine(caffeine(appProperties.cache))
 
         return caffeineCacheManager
     }
 
-    private fun caffeine(): Caffeine<Any, Any> {
+    private fun caffeine(appPropertiesCache: AppProperties.Cache): Caffeine<Any, Any> {
         return Caffeine.newBuilder()
-                .expireAfterAccess(5, TimeUnit.MINUTES)
-                .maximumSize(500)
+                .expireAfterAccess(appPropertiesCache.expireTime, TimeUnit.MINUTES)
+                .maximumSize(appPropertiesCache.maxSize)
     }
 
 }
