@@ -11,16 +11,19 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils
 import java.time.LocalDate
 import java.util.UUID
 
 @Testcontainers
 class JdbcEventRepositoyTest {
 
-    @Container
-    private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:9.6-alpine").apply {
-        withDatabaseName("eventprojecttest")
-        start()
+    companion object {
+        @Container
+        private var postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:9.6-alpine").apply {
+            withDatabaseName("eventprojecttest")
+            start()
+        }
     }
 
     private lateinit var eventRepository: JdbcEventRepository
@@ -28,10 +31,17 @@ class JdbcEventRepositoyTest {
 
     @BeforeEach
     fun start() {
+
+        val databaseName = RandomStringUtils.randomAlphabetic(8).toLowerCase()
+
+        postgreSQLContainer.execInContainer("psql", "postgresql://${postgreSQLContainer.username}:${postgreSQLContainer.password}@localhost:5432/eventprojecttest", "-c", "CREATE DATABASE $databaseName;")
+        postgreSQLContainer.withDatabaseName(databaseName)
+
         val dataSource = DataSourceBuilder.create()
                 .url(postgreSQLContainer.jdbcUrl)
                 .username(postgreSQLContainer.username)
                 .password(postgreSQLContainer.password)
+                .driverClassName(postgreSQLContainer.driverClassName)
                 .build()
 
         Flyway.configure().dataSource(dataSource).load().migrate()
