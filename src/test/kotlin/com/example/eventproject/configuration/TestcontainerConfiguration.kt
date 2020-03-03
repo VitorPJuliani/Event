@@ -10,26 +10,8 @@ import javax.sql.DataSource
 @TestConfiguration
 class TestcontainerConfiguration {
 
-//    @Bean
-//    fun basePostgresContainer(): BasePostgresContainer {
-//        return BasePostgresContainer()
-//    }
-
     @Bean
-    fun postgreSQLContainer(): PostgreSQLContainer<Nothing> {
-        return PostgreSQLContainer<Nothing>("postgres:latest").apply {
-            withDatabaseName("eventprojecttest")
-            start()
-        }
-    }
-
-    @Bean
-    fun dataSource(postgreSQLContainer: PostgreSQLContainer<Nothing>): DataSource {
-        return DataSourceBuilder.create()
-                .url(postgreSQLContainer.jdbcUrl)
-                .username(postgreSQLContainer.username)
-                .password(postgreSQLContainer.password)
-                .driverClassName(postgreSQLContainer.driverClassName)
-                .build()
+    fun basePostgresContainer(): BasePostgresContainer {
+        return BasePostgresContainer()
     }
 }

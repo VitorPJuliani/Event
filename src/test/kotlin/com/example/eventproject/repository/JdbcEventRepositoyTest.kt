@@ -1,25 +1,37 @@
 package com.example.eventproject.repository
 
+import com.example.eventproject.DbTest
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.form.ProducerForm
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
-class JdbcEventRepositoyTest: BasePostgresContainer() {
+@DbTest
+class JdbcEventRepositoyTest {
+
+    @Autowired
+    private lateinit var basePostgresContainer: BasePostgresContainer
 
     private lateinit var eventRepository: JdbcEventRepository
     private lateinit var producerRepository: JdbcProducerRepository
 
     @BeforeEach
-    fun start() {
+    fun setup() {
 
-        val jdbcTemplate = jdbcTemplate()
+        val jdbcTemplate = basePostgresContainer.jdbcTemplate()
 
         eventRepository = JdbcEventRepository(jdbcTemplate)
         producerRepository = JdbcProducerRepository(jdbcTemplate)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        basePostgresContainer.clearPool()
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.example.eventproject.repository
 
 import org.flywaydb.core.Flyway
-import org.junit.jupiter.api.AfterEach
 import org.springframework.jdbc.core.JdbcTemplate
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils
@@ -9,7 +8,7 @@ import com.zaxxer.hikari.HikariDataSource
 import com.zaxxer.hikari.HikariConfig
 import org.testcontainers.junit.jupiter.Container
 
-abstract class BasePostgresContainer {
+class BasePostgresContainer {
 
     companion object {
         @Container
@@ -55,7 +54,6 @@ abstract class BasePostgresContainer {
         return JdbcTemplate(dataSource)
     }
 
-    @AfterEach
     fun clearPool() {
         dataSource.close()
     }
