@@ -1,45 +1,37 @@
 package com.example.eventproject.repository
 
+import com.example.eventproject.annotation.DatabaseIntegrationTest
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.form.ProducerForm
-import org.assertj.core.api.Assertions.assertThat
-import org.flywaydb.core.Flyway
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.jdbc.DataSourceBuilder
-import org.springframework.jdbc.core.JdbcTemplate
-import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
-@Testcontainers
+@DatabaseIntegrationTest
 class JdbcEventRepositoyTest {
 
-    @Container
-    private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:9.6-alpine").apply {
-        withDatabaseName("eventprojecttest")
-        start()
-    }
+    @Autowired
+    private lateinit var basePostgresContainer: BasePostgresContainer
 
     private lateinit var eventRepository: JdbcEventRepository
     private lateinit var producerRepository: JdbcProducerRepository
 
     @BeforeEach
-    fun start() {
-        val dataSource = DataSourceBuilder.create()
-                .url(postgreSQLContainer.jdbcUrl)
-                .username(postgreSQLContainer.username)
-                .password(postgreSQLContainer.password)
-                .build()
+    fun setup() {
 
-        Flyway.configure().dataSource(dataSource).load().migrate()
-
-        val jdbcTemplate = JdbcTemplate(dataSource)
+        val jdbcTemplate = basePostgresContainer.jdbcTemplate()
 
         eventRepository = JdbcEventRepository(jdbcTemplate)
         producerRepository = JdbcProducerRepository(jdbcTemplate)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        basePostgresContainer.clearPool()
     }
 
     @Test
@@ -62,7 +54,7 @@ class JdbcEventRepositoyTest {
             eventRepository.saveEvent(it)
         }
 
-        assertThat(event?.name).isEqualTo("name")
+        Assertions.assertThat(event?.name).isEqualTo("name")
     }
 
     @Test
@@ -72,7 +64,7 @@ class JdbcEventRepositoyTest {
 
         val event = eventRepository.saveEvent(eventForm)
 
-        assertThat(event).isNull()
+        Assertions.assertThat(event).isNull()
     }
 
     @Test
@@ -110,7 +102,7 @@ class JdbcEventRepositoyTest {
             }
         }
 
-        assertThat(updatedEvent?.name).isEqualTo("updated name")
+        Assertions.assertThat(updatedEvent?.name).isEqualTo("updated name")
     }
 
     @Test
@@ -130,7 +122,7 @@ class JdbcEventRepositoyTest {
             eventRepository.updateEvent(it, UUID.randomUUID())
         }
 
-        assertThat(event).isNull()
+        Assertions.assertThat(event).isNull()
     }
 
     @Test
@@ -154,7 +146,7 @@ class JdbcEventRepositoyTest {
             eventRepository.updateEvent(queryEventForm, id)
         }
 
-        assertThat(event).isNull()
+        Assertions.assertThat(event).isNull()
     }
 
     @Test
@@ -181,7 +173,7 @@ class JdbcEventRepositoyTest {
             eventRepository.deleteEvent(it)
         }
 
-        assertThat(status).isEqualTo(1)
+        Assertions.assertThat(status).isEqualTo(1)
     }
 
     @Test
@@ -189,7 +181,7 @@ class JdbcEventRepositoyTest {
 
         val status = eventRepository.deleteEvent(UUID.randomUUID())
 
-        assertThat(status).isEqualTo(0)
+        Assertions.assertThat(status).isEqualTo(0)
     }
 
     @Test
@@ -216,8 +208,8 @@ class JdbcEventRepositoyTest {
             eventRepository.findEventById(it)
         }
 
-        assertThat(eventResult).isNotNull
-        assertThat(eventResult?.name).isEqualTo("name")
+        Assertions.assertThat(eventResult).isNotNull
+        Assertions.assertThat(eventResult?.name).isEqualTo("name")
     }
 
     @Test
@@ -225,7 +217,7 @@ class JdbcEventRepositoyTest {
 
         val eventResult = eventRepository.findEventById(UUID.randomUUID())
 
-        assertThat(eventResult).isNull()
+        Assertions.assertThat(eventResult).isNull()
     }
 
     @Test
@@ -249,6 +241,6 @@ class JdbcEventRepositoyTest {
 
         val eventsResult = eventRepository.findAllEvents()
 
-        assertThat(eventsResult).hasSize(3)
+        Assertions.assertThat(eventsResult).hasSize(3)
     }
 }
