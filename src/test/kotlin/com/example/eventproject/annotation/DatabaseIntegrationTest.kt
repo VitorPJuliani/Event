@@ -17,5 +17,5 @@ import org.springframework.transaction.annotation.Transactional
 @JdbcTest(excludeAutoConfiguration = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, FlywayAutoConfiguration::class, CacheAutoConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-annotation class PostgresDatasource {
+annotation class DatabaseIntegrationTest {
 }
