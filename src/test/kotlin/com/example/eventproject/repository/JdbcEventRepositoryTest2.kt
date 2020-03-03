@@ -8,14 +8,13 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.UUID
 
-class JdbcEventRepositoyTest: BasePostgresContainer() {
+class JdbcEventRepositoryTest2: BasePostgresContainer() {
 
     private lateinit var eventRepository: JdbcEventRepository
     private lateinit var producerRepository: JdbcProducerRepository
 
     @BeforeEach
     fun start() {
-
         val jdbcTemplate = jdbcTemplate()
 
         eventRepository = JdbcEventRepository(jdbcTemplate)

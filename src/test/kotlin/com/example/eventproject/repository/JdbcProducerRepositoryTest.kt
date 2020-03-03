@@ -2,7 +2,6 @@ package com.example.eventproject.repository
 
 import com.example.eventproject.form.ProducerForm
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
