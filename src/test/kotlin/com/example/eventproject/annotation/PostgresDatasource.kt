@@ -1,4 +1,4 @@
-package com.example.eventproject
+package com.example.eventproject.annotation
 
 import com.example.eventproject.configuration.TestcontainerConfiguration
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
@@ -17,5 +17,5 @@ import org.springframework.transaction.annotation.Transactional
 @JdbcTest(excludeAutoConfiguration = [DataSourceAutoConfiguration::class, DataSourceTransactionManagerAutoConfiguration::class, FlywayAutoConfiguration::class, CacheAutoConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-annotation class DbTest {
+annotation class PostgresDatasource {
 }

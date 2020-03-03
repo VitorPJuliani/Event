@@ -1,6 +1,6 @@
 package com.example.eventproject.repository
 
-import com.example.eventproject.DbTest
+import com.example.eventproject.annotation.PostgresDatasource
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.form.ProducerForm
 import org.assertj.core.api.Assertions
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
-@DbTest
+@PostgresDatasource
 class JdbcEventRepositoyTest {
 
     @Autowired
