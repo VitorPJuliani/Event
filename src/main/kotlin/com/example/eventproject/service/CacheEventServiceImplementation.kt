@@ -4,6 +4,7 @@ import com.example.eventproject.configuration.CacheConfiguration.Caches.Companio
 import com.example.eventproject.configuration.CacheConfiguration.Companion.caffeineCacheManager
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
+import com.example.eventproject.model.EventResponse
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -16,22 +17,22 @@ import java.util.UUID
 open class CacheEventServiceImplementation(private val eventServiceImplementation: EventService): EventService {
 
     @Cacheable
-    override fun findEventById(id: UUID): Event {
+    override fun findEventById(id: UUID): EventResponse {
         return eventServiceImplementation.findEventById(id)
     }
 
     @Cacheable
-    override fun findAllEvents(): List<Event> {
+    override fun findAllEvents(): List<EventResponse> {
         return eventServiceImplementation.findAllEvents()
     }
 
     @CacheEvict(allEntries = true)
-    override fun saveEvent(event: EventForm): Event {
+    override fun saveEvent(event: EventForm): EventResponse {
         return eventServiceImplementation.saveEvent(event)
     }
 
     @CacheEvict(allEntries = true)
-    override fun updateEvent(event: EventForm, id: UUID): Event {
+    override fun updateEvent(event: EventForm, id: UUID): EventResponse {
         return eventServiceImplementation.updateEvent(event, id)
     }
 

@@ -38,7 +38,7 @@ class CacheConfiguration {
 
     private fun caffeine(appPropertiesCache: AppProperties.Cache): Caffeine<Any, Any> {
         return Caffeine.newBuilder()
-                .expireAfterAccess(appPropertiesCache.expireTime, TimeUnit.MINUTES)
+                .expireAfterAccess(appPropertiesCache.expireTimeInMinutes, TimeUnit.MINUTES)
                 .maximumSize(appPropertiesCache.maxSize)
     }
 

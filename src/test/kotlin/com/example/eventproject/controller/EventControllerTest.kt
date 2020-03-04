@@ -5,6 +5,7 @@ import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
+import com.example.eventproject.model.EventResponse
 import com.example.eventproject.service.EventService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -36,9 +37,9 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
     fun `get all events should return 200`() {
 
         val events = listOf(
-                Event(UUID.randomUUID(), "name", "description", LocalDate.parse("2020-02-10"), UUID.randomUUID()),
-                Event(UUID.randomUUID(), "name 2", "description 2", LocalDate.parse("2020-02-10"), UUID.randomUUID()),
-                Event(UUID.randomUUID(), "name 3", "description 3", LocalDate.parse("2020-02-10"), UUID.randomUUID())
+                EventResponse(UUID.randomUUID(), "name", "description", LocalDate.parse("2020-02-10"), "city", UUID.randomUUID(), "20,5"),
+                EventResponse(UUID.randomUUID(), "name 2", "description 2", LocalDate.parse("2020-02-10"), "city", UUID.randomUUID(), "20,5"),
+                EventResponse(UUID.randomUUID(), "name 3", "description 3", LocalDate.parse("2020-02-10"), "city", UUID.randomUUID(), "20,5")
         )
 
         every {
@@ -58,12 +59,14 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
 
         val uuid = UUID.randomUUID()
 
-        val event = Event(
+        val event = EventResponse(
                 id = uuid,
                 name = "name",
                 description = "description",
                 date = LocalDate.parse("2020-02-10"),
-                producer = UUID.randomUUID()
+                city = "city",
+                producer = UUID.randomUUID(),
+                weather = "20,5"
         )
 
         every {
@@ -101,17 +104,20 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
             put("producer", producerUuid.toString())
         }
 
         val eventForm = EventForm(node)
 
-        val event = Event(
+        val event = EventResponse(
                 id = UUID.randomUUID(),
                 name = "name",
                 description = "description",
                 date = LocalDate.parse("2020-02-10"),
-                producer = producerUuid
+                city = "city",
+                producer = producerUuid,
+                weather = "20.5"
         )
 
         every {
@@ -135,6 +141,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
         }
 
         mockMvc.perform(post("/events")
@@ -153,6 +160,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
             put("producer", UUID.randomUUID().toString())
         }
 
@@ -182,17 +190,20 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
             put("producer", producerUuid.toString())
         }
 
         val eventForm = EventForm(node)
 
-        val event = Event(
+        val event = EventResponse(
                 id = uuid,
                 name = "name",
                 description = "description",
                 date = LocalDate.parse("2020-02-10"),
-                producer = producerUuid
+                city = "city",
+                producer = producerUuid,
+                weather = "20,5"
         )
 
         every {
@@ -217,6 +228,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
         }
 
         mockMvc.perform(put("/events/{id}", UUID.randomUUID())
@@ -239,6 +251,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-10")
+            put("city", "city")
             put("producer", UUID.randomUUID().toString())
         }
 
