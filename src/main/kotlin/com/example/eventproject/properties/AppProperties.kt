@@ -14,6 +14,7 @@ data class AppProperties(
             val maxSize: Long)
 
     data class OpenWeather(
+            val url: String,
             val apiKey: String
     )
 }

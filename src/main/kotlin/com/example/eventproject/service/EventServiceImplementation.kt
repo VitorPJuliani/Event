@@ -53,10 +53,11 @@ class EventServiceImplementation(private val eventRepository: EventRepository, p
     private fun buildEventResponse(event: Event): EventResponse {
         val currentDate = LocalDate.now()
 
-        val weather = if (currentDate == event.date)
-            openWeatherService.getCurrentWeather(event.city)
-        else
-            "The event weather is not available until the event date"
+        val weather = when {
+            currentDate == event.date -> openWeatherService.getCurrentWeatherInCelsius(event.city)
+            currentDate.isAfter(event.date) -> "ala"
+            else -> "The event weather is not available until the event date"
+        }
 
         return EventResponse(
                 id = event.id,

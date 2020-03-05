@@ -1,6 +1,10 @@
 package com.example.eventproject.service
 
+import java.time.LocalDate
+
 interface OpenWeatherService {
 
-    fun getCurrentWeather(city: String): String
+    fun getCurrentWeatherInCelsius(city: String): String
+
+    fun getPastWeatherInCelsius(city: String, date: LocalDate): String
 }

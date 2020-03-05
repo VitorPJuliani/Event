@@ -1,18 +1,17 @@
 package com.example.eventproject.service
 
+import com.example.eventproject.properties.AppProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.client.RestTemplate
+import java.sql.Timestamp
 import java.text.DecimalFormat
+import java.time.LocalDate
 
-class OpenWeatherServiceImplementation(private val restTemplate: RestTemplate, private val apiKey: String): OpenWeatherService {
+class OpenWeatherServiceImplementation(private val restTemplate: RestTemplate, private val openWeather: AppProperties.OpenWeather): OpenWeatherService {
 
-    companion object {
-        private const val api: String = "https://api.openweathermap.org/data/2.5/weather"
-    }
+    override fun getCurrentWeatherInCelsius(city: String): String {
 
-    override fun getCurrentWeather(city: String): String {
-
-        val url = "${api}?q=${city}&appid=${apiKey}"
+        val url = "${openWeather.url}?q=${city}&appid=${openWeather.apiKey}"
 
         val response = restTemplate.getForObject(url, String::class.java)
 
@@ -23,7 +22,13 @@ class OpenWeatherServiceImplementation(private val restTemplate: RestTemplate, p
 
         val celsius = convertKelvinToCelsius(temp)
 
-        return DecimalFormat("#.##").format(celsius)
+        return "${DecimalFormat("#.##").format(celsius)}ºC"
+    }
+
+    override fun getPastWeatherInCelsius(city: String, date: LocalDate): String {
+        val timeInTimeStamp: Timestamp = Timestamp.valueOf(date.atStartOfDay())
+
+        return timeInTimeStamp.toString()
     }
 
     private fun convertKelvinToCelsius(temp: Double): Double {

@@ -18,6 +18,6 @@ class ConsumingRestApplicationConfiguration {
 
     @Bean
     fun openWeatherService(restTemplate: RestTemplate, appProperties: AppProperties): OpenWeatherService {
-        return OpenWeatherServiceImplementation(restTemplate, appProperties.openweather.apiKey)
+        return OpenWeatherServiceImplementation(restTemplate, appProperties.openweather)
     }
 }
