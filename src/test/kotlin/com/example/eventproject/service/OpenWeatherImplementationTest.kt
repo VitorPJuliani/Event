@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.client.RestTemplate
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper
 
-internal class OpenWeatherServiceImplementationTest {
+internal class OpenWeatherImplementationTest {
 
     private val restTemplate: RestTemplate = mockk()
     private val openWeather: AppProperties.OpenWeather = mockk()
 
-    private val openWeatherService = OpenWeatherServiceImplementation(restTemplate, openWeather)
+    private val openWeatherService = OpenWeatherImplementation(restTemplate, openWeather)
 
     @BeforeEach
     fun setup() {
@@ -46,6 +46,6 @@ internal class OpenWeatherServiceImplementationTest {
             restTemplate.getForObject(url, String::class.java)
         } returns node.toString()
 
-        assertThat(openWeatherService.getCurrentWeatherInCelsius("Campinas")).isEqualTo("4.85ºC")
+        assertThat(openWeatherService.getCurrentWeather("Campinas")).isEqualTo(278.0)
     }
 }

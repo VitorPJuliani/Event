@@ -1,5 +1,6 @@
 package com.example.eventproject.service
 
+import com.example.eventproject.converter.WeatherConverterInterface
 import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
@@ -48,9 +49,10 @@ internal class EventServiceImplementationTest {
     )
 
     private val repository: EventRepository = mockk()
-    private val openWeatherService: OpenWeatherService = mockk()
+    private val weatherService: WeatherService = mockk()
+    private val weatherConverter: WeatherConverterInterface = mockk()
 
-    private val service: EventService = EventServiceImplementation(repository, openWeatherService)
+    private val service: EventService = EventServiceImplementation(repository, weatherService, weatherConverter)
 
     @BeforeEach
     fun init() {
