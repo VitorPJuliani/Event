@@ -1,6 +1,5 @@
 package com.example.eventproject.service
 
-import com.example.eventproject.converter.WeatherConverterInterface
 import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
@@ -8,13 +7,16 @@ import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
 import com.example.eventproject.model.EventResponse
 import com.example.eventproject.repository.EventRepository
-import java.text.DecimalFormat
+import com.example.eventproject.temperature.converter.TemperatureConverter
+import com.example.eventproject.temperature.formatter.TemperatureFormatter
+import com.example.eventproject.temperature.model.Temperature
 import java.time.LocalDate
 import java.util.UUID
 
 class EventServiceImplementation(private val eventRepository: EventRepository,
                                  private val weatherService: WeatherService,
-                                 private val weatherConverter: WeatherConverterInterface) : EventService {
+                                 private val temperatureConverter: TemperatureConverter,
+                                 private val temperatureFormatter: TemperatureFormatter) : EventService {
 
     override fun findEventById(id: UUID): EventResponse {
         val event = eventRepository.findEventById(id) ?: throw ResourceNotFoundException("Not found event with id: $id")
@@ -59,13 +61,15 @@ class EventServiceImplementation(private val eventRepository: EventRepository,
 
         val weather = when {
             currentDate.isEqual(event.date) -> {
-                val currentWeather = weatherService.getCurrentWeather(event.city)
+                val currentTemperature = weatherService.getCurrentWeather(event.city)
 
-                val weatherInCelsius = weatherConverter.convertKelvinToCelsius(currentWeather)
+                val temperature = Temperature(currentTemperature)
 
-                val weather = DecimalFormat("#.##").format(weatherInCelsius)
+                val temperatureInCelsius = temperature.convertTo(temperatureConverter)
 
-                "${weather}ºC"
+                val temperatureFormatted = temperatureInCelsius.formatTo(temperatureFormatter)
+
+                "${temperatureFormatted}ºC"
             }
             else -> "The event weather is not available until the event date"
         }
