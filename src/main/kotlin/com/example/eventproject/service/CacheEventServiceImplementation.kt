@@ -3,7 +3,6 @@ package com.example.eventproject.service
 import com.example.eventproject.configuration.CacheConfiguration.Caches.Companion.events
 import com.example.eventproject.configuration.CacheConfiguration.Companion.caffeineCacheManager
 import com.example.eventproject.form.EventForm
-import com.example.eventproject.model.Event
 import com.example.eventproject.model.EventResponse
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
@@ -14,30 +13,30 @@ import java.util.UUID
         cacheManager = caffeineCacheManager,
         cacheNames = [events]
 )
-open class CacheEventServiceImplementation(private val eventServiceImplementation: EventService): EventService {
+open class CacheEventServiceImplementation(private val eventTemperatureImplementation: EventTemperatureService): EventTemperatureService {
 
     @Cacheable
     override fun findEventById(id: UUID): EventResponse {
-        return eventServiceImplementation.findEventById(id)
+        return eventTemperatureImplementation.findEventById(id)
     }
 
     @Cacheable
     override fun findAllEvents(): List<EventResponse> {
-        return eventServiceImplementation.findAllEvents()
+        return eventTemperatureImplementation.findAllEvents()
     }
 
     @CacheEvict(allEntries = true)
     override fun saveEvent(event: EventForm): EventResponse {
-        return eventServiceImplementation.saveEvent(event)
+        return eventTemperatureImplementation.saveEvent(event)
     }
 
     @CacheEvict(allEntries = true)
     override fun updateEvent(event: EventForm, id: UUID): EventResponse {
-        return eventServiceImplementation.updateEvent(event, id)
+        return eventTemperatureImplementation.updateEvent(event, id)
     }
 
     @CacheEvict(allEntries = true)
     override fun deleteEvent(id: UUID) {
-        return eventServiceImplementation.deleteEvent(id)
+        return eventTemperatureImplementation.deleteEvent(id)
     }
 }

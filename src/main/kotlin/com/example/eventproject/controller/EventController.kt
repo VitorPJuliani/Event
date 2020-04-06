@@ -4,6 +4,7 @@ import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
 import com.example.eventproject.model.EventResponse
 import com.example.eventproject.service.EventService
+import com.example.eventproject.service.EventTemperatureService
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -19,25 +20,25 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/events")
-class EventController(private val eventService: EventService) {
+class EventController(private val eventTemperatureService: EventTemperatureService) {
 
     @GetMapping("/{id}")
     fun findEventById(@PathVariable("id") id: UUID): ResponseEntity<EventResponse> {
-        val event = eventService.findEventById(id)
+        val event = eventTemperatureService.findEventById(id)
 
         return ResponseEntity.ok(event)
     }
 
     @GetMapping
     fun findAllEvents(): ResponseEntity<List<EventResponse>> {
-        return ResponseEntity.ok(eventService.findAllEvents())
+        return ResponseEntity.ok(eventTemperatureService.findAllEvents())
     }
 
     @PostMapping
     fun saveEvent(@RequestBody data: JsonNode): ResponseEntity<EventResponse> {
         val event = EventForm(data)
 
-        val savedEvent = eventService.saveEvent(event)
+        val savedEvent = eventTemperatureService.saveEvent(event)
 
         val location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/${savedEvent.id}")
@@ -51,7 +52,7 @@ class EventController(private val eventService: EventService) {
     fun updateEvent(@RequestBody data: JsonNode, @PathVariable("id") id: UUID): ResponseEntity<EventResponse> {
         val event = EventForm(data)
 
-        val updatedEvent = eventService.updateEvent(event, id)
+        val updatedEvent = eventTemperatureService.updateEvent(event, id)
 
         return ResponseEntity.ok(updatedEvent)
     }
@@ -59,7 +60,7 @@ class EventController(private val eventService: EventService) {
     @DeleteMapping("/{id}")
     fun deleteEvent(@PathVariable("id") id: UUID): ResponseEntity<Any> {
 
-        eventService.deleteEvent(id)
+        eventTemperatureService.deleteEvent(id)
 
         return ResponseEntity.noContent().build()
     }
