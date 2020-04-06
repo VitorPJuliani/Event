@@ -23,7 +23,7 @@ internal class OpenWeatherImplementationTest {
     }
 
     @Test
-    fun test() {
+    fun getCurrentWeather() {
 
         val url = "https://api.openweathermap.org/data/2.5/weather?q=Campinas&appid=8971275617261ihsuay81w"
 
@@ -46,6 +46,6 @@ internal class OpenWeatherImplementationTest {
             restTemplate.getForObject(url, String::class.java)
         } returns node.toString()
 
-        assertThat(openWeatherService.getCurrentWeather("Campinas")).isEqualTo(278.0)
+        assertThat(openWeatherService.getCurrentTemperature("Campinas")).isEqualTo(278.0)
     }
 }

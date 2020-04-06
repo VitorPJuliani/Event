@@ -55,7 +55,7 @@ class EventTemperatureImplementation(private val eventService: EventService,
 
         val weather = when {
             currentDate.isEqual(event.date) -> {
-                val currentTemperature = weatherService.getCurrentWeather(event.city)
+                val currentTemperature = weatherService.getCurrentTemperature(event.city)
 
                 val temperature = Temperature(currentTemperature)
 

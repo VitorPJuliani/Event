@@ -4,6 +4,6 @@ import java.time.LocalDate
 
 interface WeatherService {
 
-    fun getCurrentWeather(city: String): Double
+    fun getCurrentTemperature(city: String): Double
 
 }

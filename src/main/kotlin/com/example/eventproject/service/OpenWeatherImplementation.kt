@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate
 
 class OpenWeatherImplementation(private val restTemplate: RestTemplate, private val openWeather: AppProperties.OpenWeather): WeatherService {
 
-    override fun getCurrentWeather(city: String): Double {
+    override fun getCurrentTemperature(city: String): Double {
         val url = "${openWeather.url}?q=${city}&appid=${openWeather.apiKey}"
 
         val response = restTemplate.getForObject(url, String::class.java)

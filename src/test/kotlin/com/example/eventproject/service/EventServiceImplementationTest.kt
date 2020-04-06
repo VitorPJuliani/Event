@@ -5,10 +5,7 @@ import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
-import com.example.eventproject.model.EventResponse
 import com.example.eventproject.repository.EventRepository
-import com.example.eventproject.temperature.converter.TemperatureConverter
-import com.example.eventproject.temperature.formatter.TemperatureFormatter
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -31,16 +28,6 @@ internal class EventServiceImplementationTest {
             producer = UUID.randomUUID()
     )
 
-    private val eventResponse = EventResponse (
-            id = event.id,
-            name = event.name,
-            description = event.description,
-            date = event.date,
-            city = event.city,
-            producer = event.producer,
-            weather = "The event weather is not available until the event date"
-    )
-
     private val eventForm = EventForm(
             name = "Name",
             description = "Description",
@@ -50,11 +37,8 @@ internal class EventServiceImplementationTest {
     )
 
     private val repository: EventRepository = mockk()
-    private val weatherService: WeatherService = mockk()
-    private val temperatureConverter: TemperatureConverter = mockk()
-    private val temperatureFormatter: TemperatureFormatter = mockk()
 
-    private val service: EventService = EventServiceImplementation(repository, weatherService, temperatureConverter, temperatureFormatter)
+    private val service: EventService = EventServiceImplementation(repository)
 
     @BeforeEach
     fun init() {
@@ -62,14 +46,14 @@ internal class EventServiceImplementationTest {
     }
 
     @Test
-    fun `find event by id when id exists should return eventResponse object`() {
+    fun `find event by id when id exists should return event object`() {
         val uuid = UUID.randomUUID()
 
         every {
             repository.findEventById(uuid)
         } returns event
 
-        assertThat(service.findEventById(uuid)).isEqualTo(eventResponse)
+        assertThat(service.findEventById(uuid)).isEqualTo(event)
     }
 
     @Test
@@ -87,7 +71,7 @@ internal class EventServiceImplementationTest {
     }
 
     @Test
-    fun `find all events should return list of eventsResponse`() {
+    fun `find all events should return list of events`() {
         every {
             repository.findAllEvents()
         } returns listOf()
@@ -96,12 +80,12 @@ internal class EventServiceImplementationTest {
     }
 
     @Test
-    fun `save event when correct body should return eventResponse object`() {
+    fun `save event when correct body should return event object`() {
         every {
             repository.saveEvent(eventForm)
         } returns event
 
-        assertThat(service.saveEvent(eventForm)).isEqualTo(eventResponse)
+        assertThat(service.saveEvent(eventForm)).isEqualTo(event)
     }
 
     @Test
@@ -117,14 +101,14 @@ internal class EventServiceImplementationTest {
     }
 
     @Test
-    fun `update event when correct body should return eventResponse object`() {
+    fun `update event when correct body should return event object`() {
         val uuid = UUID.randomUUID()
 
         every {
             repository.updateEvent(eventForm, uuid)
         } returns event
 
-        assertThat(service.updateEvent(eventForm, uuid)).isEqualTo(eventResponse)
+        assertThat(service.updateEvent(eventForm, uuid)).isEqualTo(event)
     }
 
     @Test
