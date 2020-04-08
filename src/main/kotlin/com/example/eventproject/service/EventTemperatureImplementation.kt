@@ -56,16 +56,11 @@ class EventTemperatureImplementation(private val eventService: EventService,
         val weather = when {
             currentDate.isEqual(event.date) -> {
                 val currentTemperature = weatherService.getCurrentTemperature(event.city)
-
-                val temperature = Temperature(currentTemperature)
-
-                val temperatureInCelsius = temperature.convertTo(temperatureConverter)
-
-                val temperatureFormatted = temperatureInCelsius.formatTo(temperatureFormatter)
-
-                temperatureFormatted.toString()
+                Temperature(currentTemperature)
+                        .convertTo(temperatureConverter)
+                        .formatTo(temperatureFormatter)
             }
-            else -> "The event weather is not available until or after the date event"
+            else -> "The event temperature is not available until or after the date event"
         }
 
         return EventResponse(

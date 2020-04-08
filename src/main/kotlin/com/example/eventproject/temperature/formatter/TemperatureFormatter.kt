@@ -4,5 +4,5 @@ import com.example.eventproject.temperature.model.Temperature
 
 interface TemperatureFormatter {
 
-    fun formatTemperature(temperature: Temperature): Double
+    fun formatTemperature(temperature: Temperature): String
 }

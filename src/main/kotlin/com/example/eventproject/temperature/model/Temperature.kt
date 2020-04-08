@@ -9,7 +9,7 @@ data class Temperature(private val value: Double) {
         return Temperature(converter.invoke(this.value))
     }
 
-    fun formatTo(formatter: TemperatureFormatter): Double {
+    fun formatTo(formatter: TemperatureFormatter): String {
         return formatter.formatTemperature(this)
     }
 

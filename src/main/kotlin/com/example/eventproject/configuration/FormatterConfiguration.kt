@@ -10,6 +10,6 @@ class FormatterConfiguration {
 
     @Bean(name = ["DoubleDecimalTemperature"])
     fun temperatureFormatter(): TemperatureFormatter {
-        return TemperatureFormatters.DOUBLE_DECIMAL
+        return TemperatureFormatters.CELSIUS_FORMAT
     }
 }

@@ -5,9 +5,9 @@ import java.text.DecimalFormat
 
 enum class TemperatureFormatters : TemperatureFormatter {
 
-    DOUBLE_DECIMAL {
-        override fun formatTemperature(temperature: Temperature): Double {
-            return DecimalFormat("#.##").format(temperature.asDouble()).toDouble()
+    CELSIUS_FORMAT {
+        override fun formatTemperature(temperature: Temperature): String {
+            return DecimalFormat("#.##°C").format(temperature.asDouble())
         }
     }
 }
