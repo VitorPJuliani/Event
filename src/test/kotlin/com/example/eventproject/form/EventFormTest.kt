@@ -18,6 +18,7 @@ internal class EventFormTest {
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-06")
+            put("city", "city")
             put("producer", "4fb5c1d4-576d-497f-9eb4-94fb0796b4f9")
         }
 
@@ -35,6 +36,7 @@ internal class EventFormTest {
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-06")
+            put("city", "city")
         }
 
         assertThrows<IllegalArgumentException> {
@@ -51,6 +53,7 @@ internal class EventFormTest {
             put("name", "name")
             put("description", "description")
             put("date", "")
+            put("city", "city")
             put("producer", "4fb5c1d4-576d-497f-9eb4-94fb0796b4f9")
         }
 
@@ -68,6 +71,7 @@ internal class EventFormTest {
             put("name", "name")
             put("description", "description")
             put("date", "2020-02-06")
+            put("city", "city")
             put("producer", "")
         }
 
@@ -85,6 +89,7 @@ internal class EventFormTest {
             put("name", "")
             put("description", "")
             put("date", "2020-02-06")
+            put("city", "city")
             put("producer", "4fb5c1d4-576d-497f-9eb4-94fb0796b4f9")
         }
 

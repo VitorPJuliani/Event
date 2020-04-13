@@ -1,7 +1,7 @@
 package com.example.eventproject.controller
 
 import com.example.eventproject.form.EventForm
-import com.example.eventproject.model.Event
+import com.example.eventproject.model.EventResponse
 import com.example.eventproject.service.EventService
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.http.ResponseEntity
@@ -21,19 +21,19 @@ import java.util.UUID
 class EventController(private val eventService: EventService) {
 
     @GetMapping("/{id}")
-    fun findEventById(@PathVariable("id") id: UUID): ResponseEntity<Event> {
+    fun findEventById(@PathVariable("id") id: UUID): ResponseEntity<EventResponse> {
         val event = eventService.findEventById(id)
 
         return ResponseEntity.ok(event)
     }
 
     @GetMapping
-    fun findAllEvents(): ResponseEntity<List<Event>> {
+    fun findAllEvents(): ResponseEntity<List<EventResponse>> {
         return ResponseEntity.ok(eventService.findAllEvents())
     }
 
     @PostMapping
-    fun saveEvent(@RequestBody data: JsonNode): ResponseEntity<Event> {
+    fun saveEvent(@RequestBody data: JsonNode): ResponseEntity<EventResponse> {
         val event = EventForm(data)
 
         val savedEvent = eventService.saveEvent(event)
@@ -47,7 +47,7 @@ class EventController(private val eventService: EventService) {
     }
 
     @PutMapping("/{id}")
-    fun updateEvent(@RequestBody data: JsonNode, @PathVariable("id") id: UUID): ResponseEntity<Event> {
+    fun updateEvent(@RequestBody data: JsonNode, @PathVariable("id") id: UUID): ResponseEntity<EventResponse> {
         val event = EventForm(data)
 
         val updatedEvent = eventService.updateEvent(event, id)

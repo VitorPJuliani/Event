@@ -1,18 +1,18 @@
 package com.example.eventproject.service
 
 import com.example.eventproject.form.EventForm
-import com.example.eventproject.model.Event
+import com.example.eventproject.model.EventResponse
 import java.util.UUID
 
 interface EventService {
 
-    fun findEventById(id: UUID): Event
+    fun findEventById(id: UUID): EventResponse
 
-    fun findAllEvents(): List<Event>
+    fun findAllEvents(): List<EventResponse>
 
-    fun saveEvent(event: EventForm): Event
+    fun saveEvent(event: EventForm): EventResponse
 
-    fun updateEvent(event: EventForm, id: UUID): Event
+    fun updateEvent(event: EventForm, id: UUID): EventResponse
 
     fun deleteEvent(id: UUID)
 }

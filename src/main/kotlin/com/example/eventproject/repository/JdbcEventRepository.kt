@@ -15,10 +15,10 @@ import java.util.UUID
 class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventRepository {
 
     companion object {
-        private const val selectEventByIdQuery = "SELECT id, name, description, date, producer FROM event WHERE id = :id"
-        private const val selectAllEventsQuery = "SELECT id, name, description, date, producer FROM event"
-        private const val insertEventQuery = "INSERT INTO event (name, description, date, producer) VALUES (?,?,?,?) RETURNING id, name, description, date, producer"
-        private const val updateEventQuery = "UPDATE event SET name = ?, description = ?, date = ?, producer = ? WHERE id = ? RETURNING id, name, description, date, producer"
+        private const val selectEventByIdQuery = "SELECT id, name, description, date, city, producer FROM event WHERE id = :id"
+        private const val selectAllEventsQuery = "SELECT id, name, description, date, city, producer FROM event"
+        private const val insertEventQuery = "INSERT INTO event (name, description, date, city, producer) VALUES (?,?,?,?,?) RETURNING id, name, description, date, city, producer"
+        private const val updateEventQuery = "UPDATE event SET name = ?, description = ?, date = ?, city = ?, producer = ? WHERE id = ? RETURNING id, name, description, date, city, producer"
         private const val deleteEventQuery = "DELETE FROM event WHERE id = :id"
     }
 
@@ -35,6 +35,7 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getObject("date", LocalDate::class.java),
+                        rs.getString("city"),
                         rs.getObject("producer", UUID::class.java))
             }
         } catch (e: EmptyResultDataAccessException) {
@@ -48,6 +49,7 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
                     rs.getString("name"),
                     rs.getString("description"),
                     rs.getObject("date", LocalDate::class.java),
+                    rs.getString("city"),
                     rs.getObject("producer", UUID::class.java))
         }
     }
@@ -58,7 +60,8 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
             preparedStatement.setString(1, event.name)
             preparedStatement.setString(2, event.description)
             preparedStatement.setObject(3, event.date)
-            preparedStatement.setObject(4, event.producer)
+            preparedStatement.setString(4, event.city)
+            preparedStatement.setObject(5, event.producer)
 
             try {
                 val rs = preparedStatement.executeQuery()
@@ -69,6 +72,7 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getObject("date", LocalDate::class.java),
+                        rs.getString("city"),
                         rs.getObject("producer", UUID::class.java))
             } catch (e: SQLException) {
                 null
@@ -82,8 +86,9 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
             preparedStatement.setString(1, event.name)
             preparedStatement.setString(2, event.description)
             preparedStatement.setObject(3, event.date)
-            preparedStatement.setObject(4, event.producer)
-            preparedStatement.setObject(5, id)
+            preparedStatement.setString(4, event.city)
+            preparedStatement.setObject(5, event.producer)
+            preparedStatement.setObject(6, id)
 
             try {
                 val rs = preparedStatement.executeQuery()
@@ -93,6 +98,7 @@ class JdbcEventRepository(private val jdbcTemplate: JdbcTemplate) : EventReposit
                             rs.getString("name"),
                             rs.getString("description"),
                             rs.getObject("date", LocalDate::class.java),
+                            rs.getString("city"),
                             rs.getObject("producer", UUID::class.java))
                 else
                     null

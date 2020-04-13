@@ -10,11 +10,12 @@ data class EventForm(
         val name: String,
         val description: String,
         val date: LocalDate,
+        val city: String,
         val producer: UUID
 ) {
     companion object {
         operator fun invoke(data: JsonNode): EventForm {
-            val expectedJson = listOf<String>("name", "description", "date", "producer")
+            val expectedJson = listOf<String>("name", "description", "date", "producer", "city")
 
             data.checkForJsonFieldErrors(expectedJson)
 
@@ -22,6 +23,7 @@ data class EventForm(
                 return EventForm(data["name"].textValue(),
                         data["description"].textValue(),
                         LocalDate.parse(data["date"].textValue()),
+                        data["city"].textValue(),
                         UUID.fromString(data["producer"].textValue()))
             } catch (e: DateTimeParseException) {
                 throw DateTimeParseException("Field date has a wrong format or is empty", data["date"].textValue(), 1)
@@ -32,7 +34,7 @@ data class EventForm(
     }
 
     init {
-        if (this.name.isEmpty() || this.description.isEmpty())
+        if (this.name.isEmpty() || this.description.isEmpty() || this.city.isEmpty())
             throw IllegalArgumentException("The required fields can not be empty")
     }
 }

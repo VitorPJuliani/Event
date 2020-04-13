@@ -46,6 +46,7 @@ class JdbcEventRepositoyTest {
                     name = "name",
                     description = "description",
                     date = LocalDate.parse("2020-02-18"),
+                    city = "city",
                     producer = it
             )
         }
@@ -60,7 +61,7 @@ class JdbcEventRepositoyTest {
     @Test
     fun saveEventWhenIncorrectBody() {
 
-        val eventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-19"), producer = UUID.randomUUID())
+        val eventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-19"), city = "city", producer = UUID.randomUUID())
 
         val event = eventRepository.saveEvent(eventForm)
 
@@ -79,6 +80,7 @@ class JdbcEventRepositoyTest {
                     name = "name",
                     description = "description",
                     date = LocalDate.parse("2020-02-18"),
+                    city = "city",
                     producer = it
             )
         }
@@ -92,6 +94,7 @@ class JdbcEventRepositoyTest {
                     name = "updated name",
                     description = "description",
                     date = LocalDate.parse("2020-02-18"),
+                    city = "city",
                     producer = it
             )
         }
@@ -113,7 +116,7 @@ class JdbcEventRepositoyTest {
         val producer = producerRepository.saveProducer(producerForm)
 
         val eventForm = producer?.id?.let {
-            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = it)
         }?.also {
             eventRepository.saveEvent(it)
         }
@@ -133,14 +136,14 @@ class JdbcEventRepositoyTest {
         val savedProducer = producerRepository.saveProducer(producerForm)
 
         val eventForm = savedProducer?.id?.let {
-            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+            EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = it)
         }
 
         val savedEvent = eventForm?.let {
             eventRepository.saveEvent(eventForm)
         }
 
-        val queryEventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = UUID.randomUUID())
+        val queryEventForm = EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = UUID.randomUUID())
 
         val event = savedEvent?.id?.let { id ->
             eventRepository.updateEvent(queryEventForm, id)
@@ -161,6 +164,7 @@ class JdbcEventRepositoyTest {
                     name = "name",
                     description = "description",
                     date = LocalDate.parse("2020-02-18"),
+                    city = "city",
                     producer = it
             )
         }
@@ -196,6 +200,7 @@ class JdbcEventRepositoyTest {
                     name = "name",
                     description = "description",
                     date = LocalDate.parse("2020-02-18"),
+                    city = "city",
                     producer = it
             )
         }
@@ -229,9 +234,9 @@ class JdbcEventRepositoyTest {
 
         val events = producer?.id?.let {
             listOf(
-                    EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), producer = it),
-                    EventForm(name = "name 2", description = "description", date = LocalDate.parse("2020-02-18"), producer = it),
-                    EventForm(name = "name 3", description = "description", date = LocalDate.parse("2020-02-18"), producer = it)
+                    EventForm(name = "name", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = it),
+                    EventForm(name = "name 2", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = it),
+                    EventForm(name = "name 3", description = "description", date = LocalDate.parse("2020-02-18"), city = "city", producer = it)
             )
         }
 

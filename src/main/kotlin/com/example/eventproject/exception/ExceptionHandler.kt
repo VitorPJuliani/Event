@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.Instant
 import java.time.format.DateTimeParseException
@@ -42,6 +43,13 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(DateTimeParseException::class)
     fun dateTimeParseExceptionHandler(ex: DateTimeParseException): ResponseEntity<ExceptionResponse> {
         val exceptionResponse = ExceptionResponse(HttpStatus.BAD_REQUEST, Instant.now(), ex.message!!)
+
+        return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
+    }
+
+    @ExceptionHandler(HttpClientErrorException::class)
+    fun httpClientErrorException(ex: HttpClientErrorException): ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Instant.now(), ex.message!!)
 
         return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
     }
