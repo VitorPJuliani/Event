@@ -1,16 +1,15 @@
 package com.example.eventproject.service
 
-import com.example.eventproject.properties.AppProperties
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.web.client.RestTemplate
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper
 
 internal class OpenWeatherImplementationTest {
 
@@ -25,17 +24,12 @@ internal class OpenWeatherImplementationTest {
 
     @Test
     fun getCurrentWeather() {
-
-        val mapper = ObjectMapper()
-        val node = mapper.createObjectNode()
-
-        node.apply {
-            putObject("main").put("temp", 278)
-        }
+        val apiResponse = JsonNodeFactory.instance.objectNode()
+        apiResponse.set<ObjectNode>("main", JsonNodeFactory.instance.objectNode().put("temp", 278))
 
         every {
-            restTemplate.getForObject(any(), eq(JsonNode::class.java), any())
-        } returns node
+            restTemplate.getForObject(url, JsonNode::class.java, "Campinas")
+        } returns apiResponse
 
         assertThat(openWeatherService.getCurrentTemperatureInKelvinByCity("Campinas")).isEqualTo(278.0)
     }
