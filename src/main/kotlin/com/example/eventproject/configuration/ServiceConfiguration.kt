@@ -2,7 +2,14 @@ package com.example.eventproject.configuration
 
 import com.example.eventproject.repository.EventRepository
 import com.example.eventproject.repository.ProducerRepository
-import com.example.eventproject.service.*
+import com.example.eventproject.service.CacheEventServiceImplementation
+import com.example.eventproject.service.ProducerService
+import com.example.eventproject.service.ProducerServiceImplementation
+import com.example.eventproject.service.CacheProducerServiceImplementation
+import com.example.eventproject.service.EventService
+import com.example.eventproject.service.EventServiceImplementation
+import com.example.eventproject.service.WeatherService
+import com.example.eventproject.service.EventTemperatureImplementation
 import com.example.eventproject.temperature.converter.TemperatureConverter
 import com.example.eventproject.temperature.formatter.TemperatureFormatter
 import org.springframework.beans.factory.annotation.Qualifier
@@ -18,13 +25,7 @@ class ServiceConfiguration {
     }
 
     @Bean
-    fun eventService(eventRepository: EventRepository) : EventService {
-        return EventServiceImplementation(eventRepository)
+    fun eventService(eventRepository: EventRepository, weatherService: WeatherService, @Qualifier("kelvinToCelsius") temperatureConverter: TemperatureConverter, @Qualifier("celsiusFormat") temperatureFormatter: TemperatureFormatter) : EventService {
+        return EventTemperatureImplementation(CacheEventServiceImplementation(EventServiceImplementation(eventRepository)), weatherService, temperatureConverter, temperatureFormatter)
     }
-
-    @Bean
-    fun eventTemperatureService(eventService: EventService, weatherService: WeatherService, @Qualifier("KelvinToCelsius") temperatureConverter: TemperatureConverter, @Qualifier("DoubleDecimalTemperature") temperatureFormatter: TemperatureFormatter): EventTemperatureService {
-        return CacheEventServiceImplementation(EventTemperatureImplementation(eventService, weatherService, temperatureConverter, temperatureFormatter))
-    }
-
 }

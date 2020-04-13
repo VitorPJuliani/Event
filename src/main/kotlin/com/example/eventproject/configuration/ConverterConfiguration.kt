@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ConverterConfiguration {
 
-    @Bean(name = ["KelvinToCelsius"])
+    @Bean(name = ["kelvinToCelsius"])
     fun kelvinToCelsius(): TemperatureConverter {
         return TemperatureConverters.KELVIN_TO_CELSIUS
     }

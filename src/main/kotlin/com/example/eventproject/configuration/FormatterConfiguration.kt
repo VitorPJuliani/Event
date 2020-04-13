@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class FormatterConfiguration {
 
-    @Bean(name = ["DoubleDecimalTemperature"])
+    @Bean(name = ["celsiusFormat"])
     fun temperatureFormatter(): TemperatureFormatter {
         return TemperatureFormatters.CELSIUS_FORMAT
     }

@@ -35,15 +35,16 @@ class EventTemperatureImplementationTest {
         val producerId = UUID.randomUUID()
 
         val event = Event(id, "name", "description", LocalDate.now(), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.now(), "city", producerId, "12.90°C")
 
         every {
             eventService.findEventById(id)
-        } returns event
+        } returns eventWithoutTemperature
 
         every {
-            weatherService.getCurrentTemperature("city")
+            weatherService.getCurrentTemperatureInKelvinByCity("city")
         } returns 128.5
 
         every {
@@ -63,12 +64,13 @@ class EventTemperatureImplementationTest {
         val producerId = UUID.randomUUID()
 
         val event = Event(id, "name", "description", LocalDate.parse("2020-04-07"), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.parse("2020-04-07"), "city", producerId, "The event temperature is not available until or after the date event")
 
         every {
             eventService.findEventById(id)
-        } returns event
+        } returns eventWithoutTemperature
 
         assertThat(eventTemperatureService.findEventById(id)).isEqualTo(eventResponse)
     }
@@ -90,15 +92,16 @@ class EventTemperatureImplementationTest {
         val eventForm = EventForm("name" , "description", LocalDate.now(), "city", producerId)
 
         val event = Event(id, "name", "description", LocalDate.now(), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.now(), "city", producerId, "12.90°C")
 
         every {
             eventService.saveEvent(eventForm)
-        } returns event
+        } returns eventWithoutTemperature
 
         every {
-            weatherService.getCurrentTemperature("city")
+            weatherService.getCurrentTemperatureInKelvinByCity("city")
         } returns 128.5
 
         every {
@@ -120,12 +123,13 @@ class EventTemperatureImplementationTest {
         val eventForm = EventForm("name" , "description", LocalDate.parse("2020-04-05"), "city", producerId)
 
         val event = Event(id, "name", "description", LocalDate.parse("2020-04-05"), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.parse("2020-04-05"), "city", producerId, "The event temperature is not available until or after the date event" )
 
         every {
             eventService.saveEvent(eventForm)
-        } returns event
+        } returns eventWithoutTemperature
 
         assertThat(eventTemperatureService.saveEvent(eventForm)).isEqualTo(eventResponse)
     }
@@ -138,15 +142,16 @@ class EventTemperatureImplementationTest {
         val eventForm = EventForm("name" , "description", LocalDate.now(), "city", producerId)
 
         val event = Event(id, "name", "description", LocalDate.now(), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.now(), "city", producerId, "12.90°C")
 
         every {
             eventService.updateEvent(eventForm, id)
-        } returns event
+        } returns eventWithoutTemperature
 
         every {
-            weatherService.getCurrentTemperature("city")
+            weatherService.getCurrentTemperatureInKelvinByCity("city")
         } returns 128.5
 
         every {
@@ -168,12 +173,13 @@ class EventTemperatureImplementationTest {
         val eventForm = EventForm("name" , "description", LocalDate.parse("2020-04-05"), "city", producerId)
 
         val event = Event(id, "name", "description", LocalDate.parse("2020-04-04"), "city", producerId)
+        val eventWithoutTemperature = EventResponse(event)
 
         val eventResponse = EventResponse(id, "name", "description", LocalDate.parse("2020-04-04"), "city", producerId, "The event temperature is not available until or after the date event" )
 
         every {
             eventService.updateEvent(eventForm, id)
-        } returns event
+        } returns eventWithoutTemperature
 
         assertThat(eventTemperatureService.updateEvent(eventForm, id)).isEqualTo(eventResponse)
     }

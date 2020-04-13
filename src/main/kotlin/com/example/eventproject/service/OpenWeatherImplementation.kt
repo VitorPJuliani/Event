@@ -1,19 +1,15 @@
 package com.example.eventproject.service
 
-import com.example.eventproject.properties.AppProperties
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.JsonNode
+import org.springframework.http.HttpStatus
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 
-class OpenWeatherImplementation(private val restTemplate: RestTemplate, private val openWeather: AppProperties.OpenWeather): WeatherService {
+class OpenWeatherImplementation(private val restTemplate: RestTemplate, private val url: String): WeatherService {
 
-    override fun getCurrentTemperature(city: String): Double {
-        val url = "${openWeather.url}?q=${city}&appid=${openWeather.apiKey}"
+    override fun getCurrentTemperatureInKelvinByCity(city: String): Double {
+        val response = restTemplate.getForObject(url, JsonNode::class.java, city)
 
-        val response = restTemplate.getForObject(url, String::class.java)
-
-        val mapper = ObjectMapper()
-        val jsonResponse = mapper.readTree(response)
-
-        return jsonResponse.get("main").get("temp").doubleValue()
+        return response?.get("main")?.get("temp")?.doubleValue() ?: throw HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Api error")
     }
 }

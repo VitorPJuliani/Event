@@ -7,15 +7,16 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.web.client.RestTemplate
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper
 
 internal class OpenWeatherImplementationTest {
 
     private val restTemplate: RestTemplate = mockk()
-    private val openWeather: AppProperties.OpenWeather = mockk()
-
-    private val openWeatherService = OpenWeatherImplementation(restTemplate, openWeather)
+    private val url: String = "https://api.openweathermap.org/data/2.5/weather?q={city}&appid=8971275617261ihsuay81w"
+    private val openWeatherService = OpenWeatherImplementation(restTemplate, url)
 
     @BeforeEach
     fun setup() {
@@ -25,8 +26,6 @@ internal class OpenWeatherImplementationTest {
     @Test
     fun getCurrentWeather() {
 
-        val url = "https://api.openweathermap.org/data/2.5/weather?q=Campinas&appid=8971275617261ihsuay81w"
-
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
 
@@ -35,17 +34,9 @@ internal class OpenWeatherImplementationTest {
         }
 
         every {
-            openWeather.url
-        } returns "https://api.openweathermap.org/data/2.5/weather"
+            restTemplate.getForObject(any(), eq(JsonNode::class.java), any())
+        } returns node
 
-        every {
-            openWeather.apiKey
-        } returns "8971275617261ihsuay81w"
-
-        every {
-            restTemplate.getForObject(url, String::class.java)
-        } returns node.toString()
-
-        assertThat(openWeatherService.getCurrentTemperature("Campinas")).isEqualTo(278.0)
+        assertThat(openWeatherService.getCurrentTemperatureInKelvinByCity("Campinas")).isEqualTo(278.0)
     }
 }

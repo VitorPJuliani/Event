@@ -13,30 +13,30 @@ import java.util.UUID
         cacheManager = caffeineCacheManager,
         cacheNames = [events]
 )
-open class CacheEventServiceImplementation(private val eventTemperatureImplementation: EventTemperatureService): EventTemperatureService {
+open class CacheEventServiceImplementation(private val eventService: EventService): EventService {
 
     @Cacheable
     override fun findEventById(id: UUID): EventResponse {
-        return eventTemperatureImplementation.findEventById(id)
+        return eventService.findEventById(id)
     }
 
     @Cacheable
     override fun findAllEvents(): List<EventResponse> {
-        return eventTemperatureImplementation.findAllEvents()
+        return eventService.findAllEvents()
     }
 
     @CacheEvict(allEntries = true)
     override fun saveEvent(event: EventForm): EventResponse {
-        return eventTemperatureImplementation.saveEvent(event)
+        return eventService.saveEvent(event)
     }
 
     @CacheEvict(allEntries = true)
     override fun updateEvent(event: EventForm, id: UUID): EventResponse {
-        return eventTemperatureImplementation.updateEvent(event, id)
+        return eventService.updateEvent(event, id)
     }
 
     @CacheEvict(allEntries = true)
     override fun deleteEvent(id: UUID) {
-        return eventTemperatureImplementation.deleteEvent(id)
+        return eventService.deleteEvent(id)
     }
 }

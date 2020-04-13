@@ -16,8 +16,4 @@ data class Temperature(private val value: Double) {
     fun asDouble(): Double {
         return this.value
     }
-
-    override fun toString(): String {
-        return "${this.value}ºC"
-    }
 }

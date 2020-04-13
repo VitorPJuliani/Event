@@ -49,7 +49,7 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(HttpClientErrorException::class)
     fun httpClientErrorException(ex: HttpClientErrorException): ResponseEntity<ExceptionResponse> {
-        val exceptionResponse = ExceptionResponse(HttpStatus.BAD_REQUEST, Instant.now(), ex.message!!)
+        val exceptionResponse = ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, Instant.now(), ex.message!!)
 
         return ResponseEntity.status(exceptionResponse.status).body(exceptionResponse)
     }

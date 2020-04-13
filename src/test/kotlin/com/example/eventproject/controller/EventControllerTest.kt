@@ -4,10 +4,8 @@ import com.example.eventproject.exception.ResourceCreateException
 import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
-import com.example.eventproject.model.Event
 import com.example.eventproject.model.EventResponse
 import com.example.eventproject.service.EventService
-import com.example.eventproject.service.EventTemperatureService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -32,7 +30,7 @@ internal class EventControllerTest(@Autowired private val mockMvc: MockMvc,
                                    @Autowired private val objectMapper: ObjectMapper) {
 
     @MockkBean
-    private lateinit var service: EventTemperatureService
+    private lateinit var service: EventService
 
     @Test
     fun `get all events should return 200`() {

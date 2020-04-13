@@ -5,6 +5,7 @@ import com.example.eventproject.exception.ResourceNotFoundException
 import com.example.eventproject.exception.ResourceUpdateException
 import com.example.eventproject.form.EventForm
 import com.example.eventproject.model.Event
+import com.example.eventproject.model.EventResponse
 import com.example.eventproject.repository.EventRepository
 import io.mockk.clearMocks
 import io.mockk.every
@@ -27,6 +28,8 @@ internal class EventServiceImplementationTest {
             city = "city",
             producer = UUID.randomUUID()
     )
+
+    private val eventResponse = EventResponse(event)
 
     private val eventForm = EventForm(
             name = "Name",
@@ -53,7 +56,7 @@ internal class EventServiceImplementationTest {
             repository.findEventById(uuid)
         } returns event
 
-        assertThat(service.findEventById(uuid)).isEqualTo(event)
+        assertThat(service.findEventById(uuid)).isEqualTo(eventResponse)
     }
 
     @Test
@@ -85,7 +88,7 @@ internal class EventServiceImplementationTest {
             repository.saveEvent(eventForm)
         } returns event
 
-        assertThat(service.saveEvent(eventForm)).isEqualTo(event)
+        assertThat(service.saveEvent(eventForm)).isEqualTo(eventResponse)
     }
 
     @Test
@@ -108,7 +111,7 @@ internal class EventServiceImplementationTest {
             repository.updateEvent(eventForm, uuid)
         } returns event
 
-        assertThat(service.updateEvent(eventForm, uuid)).isEqualTo(event)
+        assertThat(service.updateEvent(eventForm, uuid)).isEqualTo(eventResponse)
     }
 
     @Test

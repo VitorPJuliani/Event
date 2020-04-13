@@ -1,7 +1,6 @@
 package com.example.eventproject.service
 
 import com.example.eventproject.form.EventForm
-import com.example.eventproject.model.Event
 import com.example.eventproject.model.EventResponse
 import com.example.eventproject.temperature.converter.TemperatureConverter
 import com.example.eventproject.temperature.formatter.TemperatureFormatter
@@ -12,7 +11,7 @@ import java.util.UUID
 class EventTemperatureImplementation(private val eventService: EventService,
                                      private val weatherService: WeatherService,
                                      private val temperatureConverter: TemperatureConverter,
-                                     private val temperatureFormatter: TemperatureFormatter) : EventTemperatureService {
+                                     private val temperatureFormatter: TemperatureFormatter) : EventService {
 
     override fun findEventById(id: UUID): EventResponse {
         val event = eventService.findEventById(id)
@@ -26,8 +25,8 @@ class EventTemperatureImplementation(private val eventService: EventService,
         val listOfEventsResponse = mutableListOf<EventResponse>()
 
         if (events.isNotEmpty()) {
-            events.listIterator().forEach {
-                listOfEventsResponse.add(buildEventResponse(it))
+            events.map {
+                buildEventResponse(it)
             }
         }
 
@@ -50,12 +49,12 @@ class EventTemperatureImplementation(private val eventService: EventService,
         return eventService.deleteEvent(id)
     }
 
-    private fun buildEventResponse(event: Event): EventResponse {
+    private fun buildEventResponse(event: EventResponse): EventResponse {
         val currentDate = LocalDate.now()
 
         val weather = when {
             currentDate.isEqual(event.date) -> {
-                val currentTemperature = weatherService.getCurrentTemperature(event.city)
+                val currentTemperature = weatherService.getCurrentTemperatureInKelvinByCity(event.city)
                 Temperature(currentTemperature)
                         .convertTo(temperatureConverter)
                         .formatTo(temperatureFormatter)
